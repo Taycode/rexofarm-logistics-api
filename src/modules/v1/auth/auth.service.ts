@@ -1,16 +1,18 @@
 import * as bcrypt from 'bcryptjs';
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException, HttpStatus, Injectable, NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Types } from 'mongoose';
 import { ConfigService } from '@nestjs/config';
 
 import UsersRepository from '@v1/users/users.repository';
-import { UserDocument } from '@v1/users/schemas/users.schema';
+import { User } from '@v1/users/schemas/users.schema';
 import { UserInterface } from '@v1/users/interfaces/user.interface';
+import SignInDto from '@v1/auth/dto/sign-in.dto';
 import { DecodedUser } from './interfaces/decoded-user.interface';
 import JwtTokensDto from './dto/jwt-tokens.dto';
-import { LoginPayload } from './interfaces/login-payload.interface';
 
 import authConstants from './auth-constants';
 import AuthRepository from './auth.repository';
@@ -27,50 +29,38 @@ export default class AuthService {
   public async validateUser(
     email: string,
     password: string,
-  ): Promise<null | UserInterface> {
-    const user = await this.usersRepository.getVerifiedUserByEmail(email) as UserDocument;
+  ): Promise<null | Omit<User, 'password'>> {
+    const user = await this.usersRepository.getUserByEmail(email);
 
     if (!user) {
       throw new NotFoundException('The item does not exist');
     }
 
-    const passwordCompared = await bcrypt.compare(password, user.password);
+    const { password: userPassword, ...userWithoutPassword } = user;
+    const passwordCompared = await bcrypt.compare(password, userPassword);
 
     if (passwordCompared) {
-      return {
-        _id: user._id,
-        email: user.email,
-        roles: user.roles,
-      };
+      return userWithoutPassword;
     }
 
     return null;
   }
 
-  public async login(data: LoginPayload): Promise<JwtTokensDto> {
-    const payload: LoginPayload = {
-      _id: data._id,
-      email: data.email,
-      roles: data.roles,
+  public async login(data: SignInDto): Promise<JwtTokensDto | null> {
+    const { email, password } = data;
+    const user = await this.validateUser(email, password);
+    if (!user) return null;
+    const userPayload: UserInterface = {
+      _id: user._id,
+      email: user.email,
     };
-
-    const accessToken = this.jwtService.sign(payload, {
+    const accessToken = this.jwtService.sign(userPayload, {
       expiresIn: authConstants.jwt.expirationTime.accessToken,
-      secret: this.configService.get<string>('ACCESS_TOKEN') || '283f01ccce922bcc2399e7f8ded981285963cec349daba382eb633c1b3a5f282',
+      secret: this.configService.get<string>('ACCESS_TOKEN'),
     });
-    const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: authConstants.jwt.expirationTime.refreshToken,
-      secret: this.configService.get<string>('REFRESH_TOKEN') || 'c15476aec025be7a094f97aac6eba4f69268e706e603f9e1ec4d815396318c86',
-    });
-
-    await this.authRepository.addRefreshToken(
-      payload.email as string,
-      refreshToken,
-    );
 
     return {
       accessToken,
-      refreshToken,
     };
   }
 

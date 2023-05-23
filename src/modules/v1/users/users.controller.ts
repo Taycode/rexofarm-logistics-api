@@ -17,12 +17,12 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import ParseObjectIdPipe from '@pipes/parse-object-id.pipe';
-import { User } from './schemas/users.schema';
-import UsersService from './users.service';
 import UsersResponseDto, { UserResponseDto } from '@v1/users/dto/user-response.dto';
 import Serialize from '@decorators/serialization.decorator';
 import Auth from '@decorators/auth.decorator';
 import WrapResponseInterceptor from '@interceptors/wrap-response.interceptor';
+import UsersService from './users.service';
+import { User } from './schemas/users.schema';
 
 @ApiTags('Users')
 @ApiBearerAuth()

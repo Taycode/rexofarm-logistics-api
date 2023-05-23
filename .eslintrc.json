@@ -36,7 +36,9 @@
         "arrow-body-style": "off",
         "class-methods-use-this": "off",
         "no-underscore-dangle": "off",
-        "consistent-return": "off"
+        "consistent-return": "off",
+      "import/prefer-default-export": "off",
+      "max-classes-per-file": "off"
     },
     "overrides": [
         {

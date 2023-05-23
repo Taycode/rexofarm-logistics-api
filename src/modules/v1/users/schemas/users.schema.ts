@@ -5,31 +5,33 @@ import { RolesEnum } from '@decorators/roles.decorator';
 
 @Schema()
 export class User {
+  _id: string;
+
   @Prop({
     required: true,
     unique: true,
     type: String,
   })
-  email: string = '';
+    email: string = '';
 
   @Prop({
     required: true,
     type: String,
   })
-  password: string = '';
+    password: string = '';
 
   @Prop({
     required: true,
     type: Boolean,
   })
-  verified: boolean = false;
+    verified: boolean = false;
 
   @Prop({
     type: [String],
     required: false,
     default: [RolesEnum.USER],
   })
-  roles: RolesEnum[] = [];
+    roles: RolesEnum[] = [];
 }
 
 export type UserDocument = User & Document;

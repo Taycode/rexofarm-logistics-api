@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
+import { DriversModule } from '@v1/drivers/drivers.module';
 import { UserSchema, User } from './schemas/users.schema';
 
 import UsersController from './users.controller';
@@ -13,6 +14,7 @@ import UsersRepository from './users.repository';
       name: User.name,
       schema: UserSchema,
     }]),
+    DriversModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository],
