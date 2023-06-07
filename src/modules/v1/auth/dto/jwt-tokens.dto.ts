@@ -4,7 +4,7 @@ export default class JwtTokensDto {
   @ApiProperty({
     type: String,
   })
-  readonly accessToken: string = '';
+  readonly token: string = '';
   //
   // @ApiProperty({
   //   type: String,

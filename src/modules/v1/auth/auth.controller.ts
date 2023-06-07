@@ -5,6 +5,7 @@ import {
   Post,
   HttpStatus,
   UseInterceptors, HttpException,
+  Req, UseGuards, Get,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -22,9 +23,11 @@ import { JwtService } from '@nestjs/jwt';
 import UsersService from '@v1/users/users.service';
 import WrapResponseInterceptor from '@interceptors/wrap-response.interceptor';
 import SignUpDto from '@v1/users/dto/controller/sign-up.dto';
+import { JWTAuthGuard } from '@v1/auth/guards/jwt.guard';
 import AuthService from './auth.service';
 import SignInDto from './dto/sign-in.dto';
 import JwtTokensDto from './dto/jwt-tokens.dto';
+import { CustomRequest } from '../../../types/request.type';
 
 @ApiTags('Auth')
 @UseInterceptors(WrapResponseInterceptor)
@@ -80,7 +83,6 @@ export default class AuthController {
     },
     description: '500. InternalServerError',
   })
-  @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
   async signIn(@Body() payload: SignInDto): Promise<JwtTokensDto> {
@@ -138,5 +140,13 @@ export default class AuthController {
   async signUp(@Body() payload: SignUpDto): Promise<any> {
     const result = await this.usersService.create(payload);
     return { message: 'Success! please verify your email', data: result };
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JWTAuthGuard)
+  @Get('fetch-me')
+  async fetchMe(@Req() req: CustomRequest) {
+    const { user } = req;
+    return user;
   }
 }
