@@ -86,8 +86,14 @@ export abstract class BaseRepository<T extends Document> {
       .lean();
   }
 
-  public async findById(id: string): Promise<T | null> {
-    return this.model.findById(id).lean();
+  public async findById(id: string, withPassword = false): Promise<T | null> {
+    const query = this.model.findById(id);
+
+    if (!withPassword) {
+      query.select('-password');
+    }
+
+    return query.lean();
   }
 
   public async sort(

@@ -34,44 +34,16 @@ export default class UsersRepository extends BaseRepository<UserDocument> {
     return createdUser[0];
   }
 
-  public async getUnverifiedUserByEmail(email: string): Promise<User | null> {
-    return this.usersModel.findOne({
-      email,
-      verified: false,
-    }).exec();
-  }
-
   public async getUserByEmail(email: string): Promise<User | null> {
     return this.usersModel.findOne({
       email,
-    }).exec();
-  }
-
-  public async getVerifiedUserByEmail(email: string): Promise<User | null> {
-    return this.usersModel.findOne({
-      email,
-      verified: true,
-    }).exec();
+    }).lean();
   }
 
   public async getById(id: Types.ObjectId): Promise<User | null> {
     return this.usersModel.findOne({
       _id: id,
-    }, { password: 0 }).exec();
-  }
-
-  public async getVerifiedUserById(id: Types.ObjectId): Promise<User | null> {
-    return this.usersModel.findOne({
-      _id: id,
-      verified: true,
-    }, { password: 0 }).exec();
-  }
-
-  public async getUnverifiedUserById(id: Types.ObjectId): Promise<User | null> {
-    return this.usersModel.findOne({
-      _id: id,
-      verified: false,
-    }, { password: 0 }).exec();
+    }, { password: 0 }).lean();
   }
 
   public async updateById(id: Types.ObjectId, data: UpdateUserDto): Promise<User | null> {
@@ -80,15 +52,7 @@ export default class UsersRepository extends BaseRepository<UserDocument> {
       {
         $set: data,
       },
-    ).exec();
-  }
-
-  public getAll() {
-    return this.usersModel.find().exec();
-  }
-
-  public getVerifiedUsers() {
-    return this.usersModel.find({ verified: true }).exec();
+    ).lean();
   }
 
   public async getVerifiedAdminByEmail(email: string): Promise<User | null> {
@@ -96,6 +60,6 @@ export default class UsersRepository extends BaseRepository<UserDocument> {
       email,
       roles: { $in: RolesEnum.ADMIN },
       verified: true,
-    }).exec();
+    }).lean();
   }
 }

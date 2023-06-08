@@ -40,34 +40,10 @@ export default class UsersService {
     throw new Error('Could not create user');
   }
 
-  public getUnverifiedUserByEmail(email: string): Promise<User | null> {
-    return this.usersRepository.getUnverifiedUserByEmail(email);
-  }
-
-  public getVerifiedUserByEmail(email: string): Promise<User | null> {
-    return this.usersRepository.getVerifiedUserByEmail(email);
-  }
-
-  public getById(id: Types.ObjectId): Promise<User | null> {
-    return this.usersRepository.getById(id);
-  }
-
-  public getVerifiedUserById(id: Types.ObjectId): Promise<User | null> {
-    return this.usersRepository.getVerifiedUserById(id);
-  }
-
-  public getUnverifiedUserById(id: Types.ObjectId): Promise<User | null> {
-    return this.usersRepository.getUnverifiedUserById(id);
-  }
-
   public update(
     id: Types.ObjectId,
     data: UpdateUserDto,
   ): Promise<User | null> {
     return this.usersRepository.updateById(id, data);
-  }
-
-  public getVerifiedUsers() {
-    return this.usersRepository.getVerifiedUsers();
   }
 }
