@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
 import toStream from 'buffer-to-stream';
+import type { Express } from 'express';
 
 @Injectable()
 export class CloudinaryService {
   async uploadImage(
-    // eslint-disable-next-line no-undef
     file: Express.Multer.File,
   ): Promise<UploadApiResponse | UploadApiErrorResponse> {
     return new Promise((resolve, reject) => {

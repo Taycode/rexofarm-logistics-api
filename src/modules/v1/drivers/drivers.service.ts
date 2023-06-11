@@ -8,7 +8,9 @@ import { UpdateDriverNextOfKinDto, UpdateDriversDto } from '@v1/drivers/dto/upda
 @Injectable()
 
 export class DriversService {
-  constructor(private readonly driverRepository: DriversRepository) {}
+  constructor(
+    private readonly driverRepository: DriversRepository,
+  ) {}
 
   public async createDriver(payload: CreateDriversDto, user: User, session: ClientSession) {
     return this.driverRepository.createWithTransaction(payload, user, session);
