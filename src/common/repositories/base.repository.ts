@@ -106,4 +106,8 @@ export abstract class BaseRepository<T extends Document> {
   public async count(query: FilterQuery<T>): Promise<number> {
     return this.model.count(query);
   }
+
+  public async deleteOne(query: FilterQuery<T>) {
+    return this.model.deleteOne({ ...query });
+  }
 }

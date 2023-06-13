@@ -17,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    const user = await this.usersRepository.findById(payload._id);
+    const user = await this.usersRepository.fetchUserWithDriver(payload._id);
 
     if (!user) {
       throw new UnauthorizedException('Invalid token');

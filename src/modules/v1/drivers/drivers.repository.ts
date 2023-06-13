@@ -5,11 +5,13 @@ import { CreateDriversDto } from '@v1/drivers/dto/create-drivers.dto';
 import { User } from '@v1/users/schemas/users.schema';
 import { Injectable } from '@nestjs/common';
 import { UpdateDriversDto } from '@v1/drivers/dto/update-drivers.dto';
+import { BaseRepository } from '../../../common/repositories/base.repository';
 
 @Injectable()
 
-export class DriversRepository {
+export class DriversRepository extends BaseRepository<DriverDocument> {
   constructor(@InjectModel(Driver.name) private driversModel: Model<DriverDocument>) {
+    super(driversModel);
   }
 
   public async createWithTransaction(payload: CreateDriversDto, user: User, session: ClientSession): Promise<Driver> {
