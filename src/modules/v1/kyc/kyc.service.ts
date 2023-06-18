@@ -13,7 +13,7 @@ export class KYCService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  async applyForKyc(file: Express.Multer.File, type: KYCType, user: User) {
+  private async applyForKyc(file: Express.Multer.File, type: KYCType, user: User) {
     const existingKyc = await this.findUserPendingKyc(user, type);
     if (existingKyc) throw new Error(`A pending kyc already exists: ${type}`);
     const cloudinaryUpload = await this.cloudinaryService.uploadImage(file);

@@ -8,9 +8,9 @@ import {
 } from '@nestjs/swagger';
 import { JWTAuthGuard } from '@v1/auth/guards/jwt.guard';
 import { ApplyForKycDto } from '@v1/kyc/dto/controller/apply-for-kyc.dto';
-import { CustomRequest } from '../../../types/request.type';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
+import { CustomRequest } from '../../../types/request.type';
 
 @Controller('kyc')
 @ApiTags('KYC')

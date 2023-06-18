@@ -7,7 +7,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JWTAuthGuard } from '@v1/auth/guards/jwt.guard';
 import { CustomRequest } from '../../../types/request.type';
 
-@Controller('drivers')
+@Controller()
 @ApiTags('Driver')
 export class DriversController {
   constructor(
