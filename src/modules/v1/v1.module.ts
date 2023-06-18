@@ -7,6 +7,7 @@ import { CloudinaryModule } from '@v1/cloudinary/cloudinary.module';
 import { DriversModule } from '@v1/drivers/drivers.module';
 import { KycModule } from '@v1/kyc/kyc.module';
 import { VehicleModule } from './vehicle/vehicle.module';
+import { DeliveryModule } from '@v1/delivery/delivery.module';
 // import AdminPanelModule from './admin/admin-panel.module';
 
 const routes: Routes = [
@@ -17,6 +18,7 @@ const routes: Routes = [
       { path: '/user', module: UsersModule },
       { path: '/driver', module: DriversModule },
       { path: '/vehicle', module: VehicleModule },
+      { path: '/delivery', module: DeliveryModule },
     ],
   },
 ];
@@ -30,6 +32,7 @@ const routes: Routes = [
     DriversModule,
     KycModule,
     VehicleModule,
+    DeliveryModule,
     // AdminPanelModule,
   ],
 })
