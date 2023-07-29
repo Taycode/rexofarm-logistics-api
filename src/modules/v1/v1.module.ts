@@ -7,6 +7,8 @@ import { CloudinaryModule } from '@v1/cloudinary/cloudinary.module';
 import { DriversModule } from '@v1/drivers/drivers.module';
 import { KycModule } from '@v1/kyc/kyc.module';
 import { VehicleModule } from './vehicle/vehicle.module';
+import { BullModule } from '@nestjs/bull';
+
 import { DeliveryModule } from '@v1/delivery/delivery.module';
 // import AdminPanelModule from './admin/admin-panel.module';
 
@@ -33,6 +35,12 @@ const routes: Routes = [
     KycModule,
     VehicleModule,
     DeliveryModule,
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
     // AdminPanelModule,
   ],
 })

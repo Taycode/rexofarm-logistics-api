@@ -1,6 +1,5 @@
 export enum DeliveryStatus {
-  PENDING = 'PENDING',
-  IN_PROGRESS = 'IN_PROGRESS',
+  NEW_SHIPMENT = 'NEW SHIPMENT',
+  ONGOING = 'ONGOING',
   DELIVERED = 'DELIVERED',
-  FAILED = 'FAILED',
 }

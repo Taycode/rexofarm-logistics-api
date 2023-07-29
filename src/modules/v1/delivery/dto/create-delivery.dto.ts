@@ -1,10 +1,11 @@
-import { Vehicle } from '@v1/vehicle/schema/vehicle.schema';
-import { Driver } from '@v1/drivers/schemas/driver.schema';
-
 export class CreateDeliveryDto {
   orderId: string;
 
-  vehicle: Vehicle;
+  pickupLocation: string;
 
-  driver: Driver;
+  destination: string;
+
+  buyer: string;
+
+  seller: string;
 }
