@@ -85,7 +85,7 @@ export class DeliveryController {
 
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
-  @Post('pickup-request/:pickupRequestId/update')
+  @Post('pickup-request/:pickupRequestId/accept')
   async acceptPickupRequest(
     @Req() req: CustomRequest,
     @Param('pickupRequestId') pickupRequestId: string,
