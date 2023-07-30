@@ -1,5 +1,6 @@
 export enum DeliveryStatus {
-  NEW_SHIPMENT = 'NEW SHIPMENT',
-  ONGOING = 'ONGOING',
-  DELIVERED = 'DELIVERED',
+  UNASSIGNED = 'unassigned',
+  ASSIGNED = 'assigned',
+  ONGOING = 'ongoing',
+  DELIVERED = 'delivered',
 }

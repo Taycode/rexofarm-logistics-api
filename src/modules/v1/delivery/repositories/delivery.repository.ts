@@ -12,6 +12,10 @@ export class DeliveryRepository extends BaseRepository<DeliveryDocument> {
   }
 
   async create(payload: CreateDeliveryDto, session?: ClientSession): Promise<Delivery> {
-    return super.create(payload, session);
+    if (session) {
+      const createdDelivery = await super.create([payload], session);
+      return createdDelivery[0];
+    }
+    return super.create(payload);
   }
 }

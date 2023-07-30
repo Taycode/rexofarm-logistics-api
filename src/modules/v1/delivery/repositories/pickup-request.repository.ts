@@ -12,6 +12,6 @@ export class PickupRequestRepository extends BaseRepository<PickupRequestDocumen
   }
 
   async create(payload: CreatePickupRequestDto[], session?: ClientSession): Promise<PickupRequest> {
-    return super.create(payload, session);
+    return super.create([...payload], session);
   }
 }

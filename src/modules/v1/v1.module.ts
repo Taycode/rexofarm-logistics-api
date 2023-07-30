@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
 import { Routes, RouterModule } from '@nestjs/core';
 
-import AuthModule from './auth/auth.module';
-import UsersModule from './users/users.module';
 import { CloudinaryModule } from '@v1/cloudinary/cloudinary.module';
 import { DriversModule } from '@v1/drivers/drivers.module';
 import { KycModule } from '@v1/kyc/kyc.module';
-import { VehicleModule } from './vehicle/vehicle.module';
-import { BullModule } from '@nestjs/bull';
+import { BullModule } from '@nestjs/bullmq';
 
 import { DeliveryModule } from '@v1/delivery/delivery.module';
+import { BullBoardModule } from '@bull-board/nestjs';
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
+import { ExpressAdapter } from '@bull-board/express';
+import { VehicleModule } from './vehicle/vehicle.module';
+import UsersModule from './users/users.module';
+import AuthModule from './auth/auth.module';
 // import AdminPanelModule from './admin/admin-panel.module';
 
 const routes: Routes = [
@@ -36,10 +39,18 @@ const routes: Routes = [
     VehicleModule,
     DeliveryModule,
     BullModule.forRoot({
-      redis: {
+      connection: {
         host: 'localhost',
         port: 6379,
       },
+    }),
+    BullBoardModule.forRoot({
+      route: '/queues',
+      adapter: ExpressAdapter,
+    }),
+    BullBoardModule.forFeature({
+      name: 'placed-orders',
+      adapter: BullMQAdapter,
     }),
     // AdminPanelModule,
   ],

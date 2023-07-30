@@ -20,7 +20,7 @@ export class Delivery {
   @Type(() => Vehicle)
     vehicle: Vehicle;
 
-  @Prop({ type: String, enum: DeliveryStatus, default: DeliveryStatus.NEW_SHIPMENT })
+  @Prop({ type: String, enum: DeliveryStatus, default: DeliveryStatus.UNASSIGNED })
     status: DeliveryStatus;
 
   @Prop({ type: Date, required: false })

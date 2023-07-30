@@ -3,4 +3,5 @@ export enum PickupRequestStatus {
   DECLINED = 'declined',
   AWAITING_RESPONSE = 'awaiting-response',
   EXPIRED = 'expired',
+  REVOKED = 'revoked',
 }

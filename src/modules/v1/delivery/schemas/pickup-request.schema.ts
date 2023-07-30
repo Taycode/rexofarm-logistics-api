@@ -8,6 +8,8 @@ import { Delivery } from '@v1/delivery/schemas/delivery.schema';
 
 @Schema({ timestamps: true })
 export class PickupRequest {
+  _id: string;
+
   @Prop({ type: String, default: PickupRequestStatus.AWAITING_RESPONSE })
     status: PickupRequestStatus;
 

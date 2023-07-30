@@ -23,5 +23,6 @@ import { CloudinaryModule } from '@v1/cloudinary/cloudinary.module';
   ],
   controllers: [VehicleController],
   providers: [VehicleService, VehicleRepository, VehicleImageRepository],
+  exports: [VehicleService],
 })
 export class VehicleModule {}
