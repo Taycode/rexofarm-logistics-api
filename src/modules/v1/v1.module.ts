@@ -13,6 +13,7 @@ import { ExpressAdapter } from '@bull-board/express';
 import { VehicleModule } from './vehicle/vehicle.module';
 import UsersModule from './users/users.module';
 import AuthModule from './auth/auth.module';
+import { createBullMqOptions } from '../../common/utils/redis-option.util';
 // import AdminPanelModule from './admin/admin-panel.module';
 
 const routes: Routes = [
@@ -38,11 +39,8 @@ const routes: Routes = [
     KycModule,
     VehicleModule,
     DeliveryModule,
-    BullModule.forRoot({
-      connection: {
-        host: 'localhost',
-        port: 6379,
-      },
+    BullModule.forRootAsync({
+      useFactory: createBullMqOptions,
     }),
     BullBoardModule.forRoot({
       route: '/queues',
