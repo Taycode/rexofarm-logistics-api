@@ -1,13 +1,13 @@
 import { KYCType } from '@v1/kyc/enums/kyc.enum';
-import { ApiProperty } from '@nestjs/swagger';
+
+class KycFileDto {
+  url: String;
+
+  publicId: String;
+}
 
 export class CreateKycDto {
-  @ApiProperty({ type: String })
-    type: KYCType;
+  type: KYCType;
 
-  @ApiProperty({ type: String })
-    url: String;
-
-  @ApiProperty({ type: String })
-    publicId: String;
+  files: KycFileDto[];
 }

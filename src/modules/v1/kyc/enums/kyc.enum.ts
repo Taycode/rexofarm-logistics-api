@@ -5,7 +5,6 @@ export enum KYCStatus {
 }
 
 export enum KYCType {
-  DRIVER_LICENSE_FRONT = 'driver license front',
-  DRIVER_LICENSE_BACK = 'driver license back',
+  DRIVER_LICENSE = 'driver license',
   NIN = 'nin',
 }
