@@ -32,7 +32,11 @@ export class KYCService {
     return this.applyForKyc(file, KYCType.NIN, user);
   }
 
-  public async applyForDriverLicense(file: Express.Multer.File, user: User) {
-    return this.applyForKyc(file, KYCType.DRIVER_LICENSE, user);
+  public async applyForDriverLicenseFront(file: Express.Multer.File, user: User) {
+    return this.applyForKyc(file, KYCType.DRIVER_LICENSE_FRONT, user);
+  }
+
+  public async applyForDriverLicenseBack(file: Express.Multer.File, user: User) {
+    return this.applyForKyc(file, KYCType.DRIVER_LICENSE_BACK, user);
   }
 }

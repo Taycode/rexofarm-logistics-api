@@ -41,9 +41,24 @@ export class KycController {
   @UseGuards(JWTAuthGuard)
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: ApplyForKycDto })
-  @Post('driver-license')
-  async applyForDriverLicense(@UploadedFile() file: Express.Multer.File, @Req() req: CustomRequest) {
+  @Post('driver-license/front')
+  async applyForDriverLicenseFront(@UploadedFile() file: Express.Multer.File, @Req() req: CustomRequest) {
     const { user } = req;
-    return this.kycService.applyForDriverLicense(file, user);
+    return this.kycService.applyForDriverLicenseFront(file, user);
+  }
+
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: memoryStorage(),
+    }),
+  )
+  @ApiBearerAuth()
+  @UseGuards(JWTAuthGuard)
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: ApplyForKycDto })
+  @Post('driver-license/back')
+  async applyForDriverLicenseBack(@UploadedFile() file: Express.Multer.File, @Req() req: CustomRequest) {
+    const { user } = req;
+    return this.kycService.applyForDriverLicenseBack(file, user);
   }
 }
