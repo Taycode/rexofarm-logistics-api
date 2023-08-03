@@ -47,4 +47,8 @@ export class VehicleService {
   async fetchVehicleImages(vehicle: Vehicle) {
     return this.vehicleImageRepository.find({ vehicle });
   }
+
+  async fetchRandomVehicles() {
+    return this.vehicleRepository.find({});
+  }
 }
