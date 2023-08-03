@@ -4,6 +4,18 @@ import { KYCStatus, KYCType } from '@v1/kyc/enums/kyc.enum';
 import mongoose, { Document } from 'mongoose';
 import { Type } from 'class-transformer';
 
+@Schema({ _id: false })
+export class KYCFile {
+  @Prop({ type: String })
+    url: string;
+
+  @Prop({ type: String })
+    publicId: string;
+}
+
+// Register the KYCFile schema with Mongoose
+export const KYCFileSchema = SchemaFactory.createForClass(KYCFile);
+
 @Schema({ timestamps: true })
 export class KYC {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name, required: true })
@@ -16,12 +28,9 @@ export class KYC {
   @Prop({ type: String, enum: KYCType })
     type: KYCType;
 
-  @Prop({ type: String })
-    url: String;
-
-  @Prop({ type: String })
-    publicId: String;
+  @Prop({ type: [KYCFileSchema] }) // Use the registered KYCFileSchema for the files array
+    files: KYCFile[];
 }
 
-export type KYCDocument = Document & KYC
+export type KYCDocument = Document & KYC;
 export const KYCSchema = SchemaFactory.createForClass(KYC);

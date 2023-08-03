@@ -59,7 +59,7 @@ export class DeliveryService {
   }
 
   async fetchPickupRequests(driver: Driver) {
-    return this.pickupRequestRepository.find({ driver });
+    return this.pickupRequestRepository.find({ driver, status: { $ne: PickupRequestStatus.ACCEPTED } });
   }
 
   async fetchOnePickupRequest(driver: Driver, pickupRequestId: string) {
