@@ -57,7 +57,8 @@ export class DeliveryController {
 
   @Post('mock-place-orders')
   async mockPlaceOrders(@Body() payload: MockCreateDeliveryDto) {
-    return this.placedOrdersQueue.add(payload);
+    return this.deliveryService.initiatePickups(payload);
+    // return this.placedOrdersQueue.add(payload);
   }
 
   @ApiBearerAuth()
