@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 
 import { Types, Connection } from 'mongoose';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { User } from '@v1/users/schemas/users.schema';
 import { InjectConnection } from '@nestjs/mongoose';
@@ -46,11 +46,11 @@ export default class UsersService {
 
     const user = await this.usersRepository.getById(userId);
     if (!user) {
-      throw new HttpException('No user found with this id', HttpStatus.BAD_REQUEST);
+      throw new NotFoundException('No user found with this id');
     }
     const isCorrect = await bcrypt.compare(oldPassword, user?.password!);
     if (!isCorrect) {
-      throw new HttpException('Password is incorrect', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('Password is incorrect');
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await this.usersRepository.updateById(userId, {
