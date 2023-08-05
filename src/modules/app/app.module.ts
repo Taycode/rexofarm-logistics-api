@@ -55,6 +55,7 @@ import AppService from './app.service';
       inject: [ConfigService],
     }),
     V1Module,
+
   ],
   controllers: [AppController],
   providers: [AppService],

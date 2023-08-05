@@ -1,14 +1,20 @@
 import {
   Controller,
-  UseInterceptors,
+  UseInterceptors, HttpCode, HttpStatus, Body, Patch, UseGuards, Req,
 } from '@nestjs/common';
 import {
-  ApiBearerAuth,
-  ApiExtraModels,
+  ApiBadRequestResponse,
+  ApiBearerAuth, ApiBody, ApiConflictResponse,
+  ApiExtraModels, ApiInternalServerErrorResponse, ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import WrapResponseInterceptor from '@interceptors/wrap-response.interceptor';
+import UsersService from '@v1/users/users.service';
+// import { JwtService } from '@nestjs/jwt';
+import ChangePasswordDto from '@v1/users/dto/change-password.dto';
+import { JWTAuthGuard } from '@v1/auth/guards/jwt.guard';
 import { User } from './schemas/users.schema';
+import { CustomRequest } from '../../../types/request.type';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -16,5 +22,62 @@ import { User } from './schemas/users.schema';
 @UseInterceptors(WrapResponseInterceptor)
 @Controller()
 export default class UsersController {
-  constructor() { }
+  constructor(
+      private readonly userService: UsersService,
+    // private readonly jwtSerice: JwtService,
+  ) {
+  }
+
+  @ApiBody({ type: ChangePasswordDto })
+  @ApiBearerAuth()
+  @UseGuards(JWTAuthGuard)
+  @ApiOkResponse({
+    description: '201, Success',
+  })
+  @ApiBadRequestResponse({
+    schema: {
+      type: 'object',
+      example: {
+        message: [
+          {
+            target: {
+              email: 'string',
+              password: 'string',
+            },
+            value: 'string',
+            property: 'string',
+            children: [],
+            constraints: {},
+          },
+        ],
+        error: 'Bad Request',
+      },
+    },
+    description: '400. ValidationException',
+  })
+  @ApiConflictResponse({
+    schema: {
+      type: 'object',
+      example: {
+        message: 'string',
+      },
+    },
+    description: '409. ConflictResponse',
+  })
+  @ApiInternalServerErrorResponse({
+    schema: {
+      type: 'object',
+      example: {
+        message: 'string',
+        details: {},
+      },
+    },
+    description: '500. InternalServerError',
+  })
+  @HttpCode(HttpStatus.OK)
+  @Patch('change-password')
+  async changePassword(@Body()payload:ChangePasswordDto, @Req()req:CustomRequest):Promise<void> {
+    const { user } = req;
+    await this.userService.changePassword(payload, user._id);
+  }
 }
