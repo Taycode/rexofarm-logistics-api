@@ -11,7 +11,7 @@ import { ClientSession, ObjectId } from 'mongodb';
 import { UserWithDriver } from '@v1/users/types/user.type';
 import UpdateUserDto from './dto/update-user.dto';
 import { BaseRepository } from '../../../common/repositories/base.repository';
-import { Driver } from '@v1/drivers/schemas/driver.schema';
+// import { Driver } from '@v1/drivers/schemas/driver.schema';
 
 @Injectable()
 export default class UsersRepository extends BaseRepository<UserDocument> {
