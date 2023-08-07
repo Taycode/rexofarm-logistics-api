@@ -65,7 +65,10 @@ export class DeliveryService {
   }
 
   async fetchOnePickupRequest(driver: Driver, pickupRequestId: string) {
-    return this.pickupRequestRepository.findOne({ driver, _id: pickupRequestId });
+    return this.pickupRequestRepository.findOneWithPopulation(
+      { driver, _id: pickupRequestId },
+      'delivery',
+    );
   }
 
   async acceptPickupRequest(driver: Driver, pickupRequestId: string) {

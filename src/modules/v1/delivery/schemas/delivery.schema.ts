@@ -5,6 +5,17 @@ import mongoose, { Document } from 'mongoose';
 import { Type } from 'class-transformer';
 import { DeliveryStatus } from '@v1/delivery/enums/delivery.enum';
 
+@Schema({ _id: false })
+export class DeliveryItem {
+  @Prop({ type: String })
+    item: string;
+
+  @Prop({ type: Number })
+    quantity: number;
+}
+
+export const DeliveryItemSchema = SchemaFactory.createForClass(DeliveryItem);
+
 @Schema({ timestamps: true })
 export class Delivery {
   _id: string;
@@ -37,6 +48,9 @@ export class Delivery {
 
   @Prop({ type: String, required: true })
     seller: string;
+
+  @Prop({ type: [DeliveryItemSchema] })
+    items: DeliveryItem[];
 }
 
 export type DeliveryDocument = Document & Delivery;
