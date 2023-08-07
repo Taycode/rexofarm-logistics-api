@@ -13,14 +13,24 @@ export class KYCService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  private async applyForKyc(file: Express.Multer.File, type: KYCType, user: User) {
+  private uploadMultipleImages(files: Array<Express.Multer.File>) {
+    return Promise.all(files.map((file) => this.cloudinaryService.uploadImage(file)));
+  }
+
+  private async applyForKyc(files: Array<Express.Multer.File>, type: KYCType, user: User) {
     const existingKyc = await this.findUserPendingKyc(user, type);
     if (existingKyc) throw new Error(`A pending kyc already exists: ${type}`);
-    const cloudinaryUpload = await this.cloudinaryService.uploadImage(file);
+    const cloudinaryUploads = await this.uploadMultipleImages(files);
+    const kycFiles: CreateKycDto['files'] = cloudinaryUploads.map((eachFile) => {
+      return {
+        url: eachFile.secure_url,
+        publicId: eachFile.public_id,
+      };
+    });
+
     return this.kycRepository.createKyc({
       type,
-      url: cloudinaryUpload.secure_url,
-      publicId: cloudinaryUpload.public_id,
+      files: kycFiles,
     }, user);
   }
 
@@ -28,11 +38,11 @@ export class KYCService {
     return this.kycRepository.findOne({ user, type, status: KYCStatus.PENDING });
   }
 
-  public async applyForNin(file: Express.Multer.File, user: User) {
-    return this.applyForKyc(file, KYCType.NIN, user);
+  public async applyForNin(files: Array<Express.Multer.File>, user: User) {
+    return this.applyForKyc(files, KYCType.NIN, user);
   }
 
-  public async applyForDriverLicense(file: Express.Multer.File, user: User) {
-    return this.applyForKyc(file, KYCType.DRIVER_LICENSE, user);
+  public async applyForDriverLicense(files: Array<Express.Multer.File>, user: User) {
+    return this.applyForKyc(files, KYCType.DRIVER_LICENSE, user);
   }
 }
