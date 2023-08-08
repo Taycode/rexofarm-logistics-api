@@ -10,12 +10,14 @@ import { Connection } from 'mongoose';
 import { PickupRequestRepository } from '@v1/delivery/repositories/pickup-request.repository';
 import { CreatePickupRequestDto } from '@v1/delivery/dto/create-pickup-request.dto';
 import { PickupRequestStatus } from '@v1/delivery/enums/pickup-request.enum';
+import { VehicleService } from '@v1/vehicle/vehicle.service';
 
 @Injectable()
 export class DeliveryService {
   constructor(
     private readonly deliveryRepository: DeliveryRepository,
     private readonly pickupRequestRepository: PickupRequestRepository,
+    private readonly vehicleService: VehicleService,
     @InjectConnection() private readonly connection: Connection,
   ) {}
 
@@ -59,11 +61,17 @@ export class DeliveryService {
   }
 
   async fetchPickupRequests(driver: Driver) {
-    return this.pickupRequestRepository.find({ driver, status: { $ne: PickupRequestStatus.ACCEPTED } });
+    return this.pickupRequestRepository.findWithPopulation(
+      { driver, status: { $ne: PickupRequestStatus.ACCEPTED } },
+      'delivery',
+    );
   }
 
   async fetchOnePickupRequest(driver: Driver, pickupRequestId: string) {
-    return this.pickupRequestRepository.findOne({ driver, _id: pickupRequestId });
+    return this.pickupRequestRepository.findOneWithPopulation(
+      { driver, _id: pickupRequestId },
+      'delivery',
+    );
   }
 
   async acceptPickupRequest(driver: Driver, pickupRequestId: string) {
@@ -122,5 +130,17 @@ export class DeliveryService {
       }, { new: true });
     }
     throw new Error('Could not update delivery status');
+  }
+
+  async initiatePickups(payload: CreateDeliveryDto) {
+    // ToDo: Replace with Driver selection system
+    const randomVehicles = await this.vehicleService.fetchRandomVehicles();
+    const driversSelected: DriverPickupRequestDto[] = randomVehicles.map((each) => {
+      return {
+        driver: each.driver,
+        vehicle: each,
+      };
+    });
+    await this.sendPickupRequest(payload, driversSelected);
   }
 }

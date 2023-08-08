@@ -3,12 +3,14 @@ import {
   Controller, Get, HttpException, HttpStatus, Param, Post, Req, UseGuards,
 } from '@nestjs/common';
 import { DeliveryService } from '@v1/delivery/delivery.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { JWTAuthGuard } from '@v1/auth/guards/jwt.guard';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { MockCreateDeliveryDto } from '@v1/delivery/dto/create-delivery.dto';
 import { UpdateDeliveryStatusDto } from '@v1/delivery/dto/update-delivery-status.dto';
+import { DeliveryEntity } from '@v1/delivery/entities/delivery.entity';
+import { PickupRequestEntity, PickupRequestWithDeliveryEntity } from '@v1/delivery/entities/pickup-request.entity';
 import { CustomRequest } from '../../../types/request.type';
 
 @ApiTags('Delivery')
@@ -21,6 +23,10 @@ export class DeliveryController {
 
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
+  @ApiOkResponse({
+    description: 'Successful Delivery fetch',
+    type: [DeliveryEntity],
+  })
   @Get('fetch')
   async fetchDeliveries(@Req() req: CustomRequest) {
     const { user } = req;
@@ -29,6 +35,10 @@ export class DeliveryController {
 
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
+  @ApiOkResponse({
+    description: 'Successful Delivery fetch',
+    type: DeliveryEntity,
+  })
   @Get('fetch/:deliveryId')
   async fetchOneDelivery(@Req() req: CustomRequest, @Param('deliveryId') deliveryId: string) {
     const { user } = req;
@@ -39,6 +49,10 @@ export class DeliveryController {
 
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
+  @ApiOkResponse({
+    description: 'Successful Delivery fetch',
+    type: [PickupRequestEntity],
+  })
   @Get('pickup-request/fetch')
   async fetchPickupRequests(@Req() req: CustomRequest) {
     const { user } = req;
@@ -47,6 +61,10 @@ export class DeliveryController {
 
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
+  @ApiOkResponse({
+    description: 'Successful Delivery fetch',
+    type: PickupRequestWithDeliveryEntity,
+  })
   @Get('pickup-request/fetch/:pickupRequestId')
   async fetchOnePickupRequest(@Req() req: CustomRequest, @Param('pickupRequestId') pickupRequestId: string) {
     const { user } = req;
@@ -57,11 +75,16 @@ export class DeliveryController {
 
   @Post('mock-place-orders')
   async mockPlaceOrders(@Body() payload: MockCreateDeliveryDto) {
-    return this.placedOrdersQueue.add(payload);
+    return this.deliveryService.initiatePickups(payload);
+    // return this.placedOrdersQueue.add(payload);
   }
 
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
+  @ApiOkResponse({
+    description: 'Successful Delivery fetch',
+    type: DeliveryEntity,
+  })
   @Post('/:deliveryId/update')
   async updateDeliveryStatus(
     @Req() req: CustomRequest,
