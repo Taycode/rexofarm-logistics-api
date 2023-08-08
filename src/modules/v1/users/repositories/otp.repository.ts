@@ -26,12 +26,11 @@ export default class OTPRepository extends BaseRepository<OTPDocument> {
     });
   }
 
-  public async VerifyOtp(userVer:CreateOTPDto,otpId: Types.ObjectId): Promise<OTP | null> {
+  public async VerifyOtp(userVer:CreateOTPDto, otpId: Types.ObjectId): Promise<OTP | null> {
     return this.otpModel.findOne({
       _id: otpId,
       otp: userVer.otp,
       email: userVer.email,
-      type: OtpTypeEnum.FORGOT_PASSWORD,
     }).lean();
   }
 }

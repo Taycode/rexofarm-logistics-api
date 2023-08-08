@@ -12,7 +12,6 @@ import { UserWithDriver } from '@v1/users/types/user.type';
 import UpdateUserDto from '../dto/update-user.dto';
 import { BaseRepository } from '../../../../common/repositories/base.repository';
 
-
 @Injectable()
 export default class UsersRepository extends BaseRepository<UserDocument> {
   constructor(
@@ -53,6 +52,9 @@ export default class UsersRepository extends BaseRepository<UserDocument> {
       id,
       {
         $set: data,
+      },
+      {
+        projection: { password: 0 },
       },
     ).lean();
   }
