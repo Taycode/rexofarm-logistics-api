@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { OtpTypeEnum } from '@v1/users/enums/otp-type.enum';
 
-import { OtpTypeEnum } from '@decorators/otp-type.decorator';
 
 @Schema()
 export class UserVerification {

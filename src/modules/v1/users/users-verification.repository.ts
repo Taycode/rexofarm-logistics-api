@@ -3,11 +3,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
 
 import CreateUserverifDto from '@v1/auth/dto/create-userverif.dto';
-import { OtpTypeEnum } from '@decorators/otp-type.decorator';
 
 import { UserVerification, UserVerificationDocument } from '@v1/users/schemas/users.verification.schema';
 
 import { BaseRepository } from '../../../common/repositories/base.repository';
+import { OtpTypeEnum } from '@v1/users/enums/otp-type.enum';
 
 @Injectable()
 
