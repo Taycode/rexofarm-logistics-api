@@ -5,4 +5,4 @@ export enum OtpTypeEnum {
     FORGOT_PASSWORD = 'FORGOT_PASSWORD'
 }
 
-export const OtpType = (...otp:OtpType[]) => SetMetadata('otptype', otp);
+export const OtpType = (...otp: OtpTypeEnum[]) => SetMetadata('otptype', otp);
