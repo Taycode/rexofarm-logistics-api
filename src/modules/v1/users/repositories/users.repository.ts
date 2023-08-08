@@ -9,8 +9,9 @@ import { UserDocument, User } from '@v1/users/schemas/users.schema';
 
 import { ClientSession, ObjectId } from 'mongodb';
 import { UserWithDriver } from '@v1/users/types/user.type';
-import UpdateUserDto from './dto/update-user.dto';
-import { BaseRepository } from '../../../common/repositories/base.repository';
+import UpdateUserDto from '../dto/update-user.dto';
+import { BaseRepository } from '../../../../common/repositories/base.repository';
+
 
 @Injectable()
 export default class UsersRepository extends BaseRepository<UserDocument> {
