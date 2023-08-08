@@ -110,6 +110,7 @@ export class DeliveryService {
         },
         {
           status: DeliveryStatus.ASSIGNED,
+          driver,
         },
         txn,
         { new: true },
