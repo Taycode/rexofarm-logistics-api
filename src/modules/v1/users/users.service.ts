@@ -8,7 +8,7 @@ import { InjectConnection } from '@nestjs/mongoose';
 import SignUpDto from '@v1/users/dto/controller/sign-up.dto';
 import { DriversService } from '@v1/drivers/drivers.service';
 import ChangePasswordDto from '@v1/users/dto/change-password.dto';
-import UsersRepository from './users.repository';
+import UsersRepository from './repositories/users.repository';
 import UpdateUserDto from './dto/update-user.dto';
 
 @Injectable()

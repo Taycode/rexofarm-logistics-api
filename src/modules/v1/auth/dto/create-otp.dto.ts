@@ -3,7 +3,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export default class CreateUserverifDto {
+export default class CreateOTPDto {
     @ApiProperty({ type: String })
     @IsNotEmpty()
     @IsString()
