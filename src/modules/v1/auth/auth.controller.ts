@@ -178,6 +178,8 @@ export default class AuthController {
     return { message: 'Otp has been sent', data: token };
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JWTAuthGuard)
   @ApiOkResponse({
     description: '200,Success',
   })
