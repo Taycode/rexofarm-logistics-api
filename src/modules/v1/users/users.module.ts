@@ -8,6 +8,7 @@ import { UserVerificationSchema, UserVerification } from './schemas/users.verifi
 import UsersController from './users.controller';
 import UsersService from './users.service';
 import UsersRepository from './users.repository';
+import UsersVerificationRepository from '@v1/users/users-verification.repository';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import UsersRepository from './users.repository';
     DriversModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService, UsersRepository],
-  exports: [UsersService, UsersRepository, MongooseModule],
+  providers: [UsersService, UsersRepository, UsersVerificationRepository],
+  exports: [UsersService, UsersRepository, MongooseModule, UsersVerificationRepository],
 })
 export default class UsersModule {}
