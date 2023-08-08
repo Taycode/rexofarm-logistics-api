@@ -159,8 +159,8 @@ export default class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('forgot-password/otp-request')
   async initiatePasswordReset(@Body() payload: InitiatePasswordResetDto) {
-    await this.authService.forgotPasswordOtpRequest(payload.email);
-    return { message: 'Otp has been sent' };
+    const token = await this.authService.forgotPasswordOtpRequest(payload.email);
+    return { message: 'Otp has been sent', data: token };
   }
 
   @ApiOkResponse({
@@ -168,8 +168,9 @@ export default class AuthController {
   })
   @HttpCode(HttpStatus.OK)
   @Post('forgot-password/otp-validate')
-  async validatePasswordReset(@Body() payload: ValidatePasswordResetDto) {
-    const token = await this.authService.validatePasswordResetOTP(payload);
+  async validatePasswordReset(@Body() payload: ValidatePasswordResetDto, @Req() req: CustomRequest) {
+    const { user } = req;
+    const token = await this.authService.validatePasswordResetOTP(payload, user._id);
     return { message: 'Otp verification successfully', data: token };
   }
 

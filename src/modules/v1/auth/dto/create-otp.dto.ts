@@ -18,3 +18,4 @@ export default class CreateOTPDto {
     @MinLength(6)
     readonly otp: string = '';
 }
+

@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
 
@@ -26,10 +26,11 @@ export default class OTPRepository extends BaseRepository<OTPDocument> {
     });
   }
 
-  public async VerifyOtp(userVer:CreateOTPDto): Promise<OTP | null> {
+  public async VerifyOtp(userVer:CreateOTPDto,otpId: Types.ObjectId): Promise<OTP | null> {
     return this.otpModel.findOne({
-      email: userVer.email,
+      _id: otpId,
       otp: userVer.otp,
+      email: userVer.email,
       type: OtpTypeEnum.FORGOT_PASSWORD,
     }).lean();
   }

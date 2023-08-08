@@ -10,9 +10,8 @@ import { UserInterface } from '@v1/users/interfaces/user.interface';
 import SignInDto from '@v1/auth/dto/sign-in.dto';
 import { generateOtp } from '@v1/auth/helpers/utils';
 import OTPRepository from '@v1/users/repositories/otp.repository';
-import CreateOTPDto from '@v1/auth/dto/create-otp.dto';
-import JwtTokensDto from './dto/jwt-tokens.dto';
 import { ValidatePasswordResetDto } from '@v1/auth/dto/password-reset.dto';
+import JwtTokensDto from './dto/jwt-tokens.dto';
 
 @Injectable()
 export default class AuthService {
@@ -60,19 +59,36 @@ export default class AuthService {
     };
   }
 
-  public async forgotPasswordOtpRequest(email:string):Promise<void > {
+  public async forgotPasswordOtpRequest(email:string):Promise<JwtTokensDto | null > {
     const exists = await this.usersRepository.getUserByEmail(email);
     if (!exists) {
       throw new NotFoundException('user does not exist, signup instead');
     }
 
     const otp = generateOtp(6);
-    await this.userVerRepository.createOtp({ email, otp });
+    const userVer = await this.userVerRepository.createOtp({ email, otp });
+
+    // sign a token with the id of the otp and the mail
     // email service goes here
+
+    const userPayload: UserInterface = {
+      _id: userVer._id,
+      email: userVer.email,
+    };
+
+    const token = await this.jwtService.signAsync(userPayload, {
+      secret: this.configService.get<string>('SECRET'),
+      expiresIn: '10m',
+
+    });
+
+    return {
+      token,
+    };
   }
 
-  public async validatePasswordResetOTP(payload: ValidatePasswordResetDto) {
-    const isVerified = await this.userVerRepository.VerifyOtp(payload);
+  public async validatePasswordResetOTP(payload: ValidatePasswordResetDto, otpId:string) {
+    const isVerified = await this.userVerRepository.VerifyOtp(payload, otpId);
 
     if (!isVerified) {
       throw new BadRequestException('Otp is wrong');
