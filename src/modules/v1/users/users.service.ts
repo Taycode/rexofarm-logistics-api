@@ -1,13 +1,14 @@
 import * as bcrypt from 'bcryptjs';
 
 import { Types, Connection } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { User } from '@v1/users/schemas/users.schema';
 import { InjectConnection } from '@nestjs/mongoose';
 import SignUpDto from '@v1/users/dto/controller/sign-up.dto';
 import { DriversService } from '@v1/drivers/drivers.service';
-import UsersRepository from './users.repository';
+import ChangePasswordDto from '@v1/users/dto/change-password.dto';
+import UsersRepository from './repositories/users.repository';
 import UpdateUserDto from './dto/update-user.dto';
 
 @Injectable()
@@ -38,6 +39,25 @@ export default class UsersService {
     await session.endSession();
     if (createdUserAndDriver) return createdUserAndDriver;
     throw new Error('Could not create user');
+  }
+
+  public async changePassword(details: ChangePasswordDto, userId: string) {
+    const { oldPassword, newPassword } = details;
+
+    const user = await this.usersRepository.getById(userId);
+    if (!user) {
+      throw new NotFoundException('No user found with this id');
+    }
+    const isCorrect = await bcrypt.compare(oldPassword, user?.password!);
+    if (!isCorrect) {
+      throw new BadRequestException('Password is incorrect');
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await this.usersRepository.updateById(userId, {
+      email: user.email,
+      password: hashedPassword,
+      verified: true,
+    });
   }
 
   public update(

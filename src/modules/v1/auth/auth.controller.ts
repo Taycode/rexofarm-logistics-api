@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   Post,
+  Patch,
   HttpStatus,
   UseInterceptors, HttpException,
   Req, UseGuards, Get,
@@ -24,6 +25,7 @@ import UsersService from '@v1/users/users.service';
 import WrapResponseInterceptor from '@interceptors/wrap-response.interceptor';
 import SignUpDto from '@v1/users/dto/controller/sign-up.dto';
 import { JWTAuthGuard } from '@v1/auth/guards/jwt.guard';
+import { CompletePasswordResetDto, InitiatePasswordResetDto, ValidatePasswordResetDto } from '@v1/auth/dto/password-reset.dto';
 import AuthService from './auth.service';
 import SignInDto from './dto/sign-in.dto';
 import JwtTokensDto from './dto/jwt-tokens.dto';
@@ -148,5 +150,35 @@ export default class AuthController {
   async fetchMe(@Req() req: CustomRequest) {
     const { user } = req;
     return user;
+  }
+
+  @ApiBody({ type: String })
+  @ApiOkResponse({
+    description: '200, Success',
+  })
+  @HttpCode(HttpStatus.OK)
+  @Post('forgot-password/otp-request')
+  async initiatePasswordReset(@Body() payload: InitiatePasswordResetDto) {
+    await this.authService.forgotPasswordOtpRequest(payload.email);
+    return { message: 'Otp has been sent' };
+  }
+
+  @ApiOkResponse({
+    description: '200,Success',
+  })
+  @HttpCode(HttpStatus.OK)
+  @Post('forgot-password/otp-validate')
+  async validatePasswordReset(@Body() payload: ValidatePasswordResetDto) {
+    const token = await this.authService.validatePasswordResetOTP(payload);
+    return { message: 'Otp verification successfully', data: token };
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JWTAuthGuard)
+  @Patch('reset-password')
+  async completePasswordReset(@Body() payload: CompletePasswordResetDto, @Req() req: CustomRequest) {
+    const { user } = req;
+    const token = await this.authService.resetPassword({ email: user.email, password: payload.password });
+    return { message: 'Password reset successful', token };
   }
 }
