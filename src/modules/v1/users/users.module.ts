@@ -3,12 +3,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { DriversModule } from '@v1/drivers/drivers.module';
 import { UserSchema, User } from './schemas/users.schema';
-import { UserVerificationSchema, UserVerification } from './schemas/users.verification.schema';
+import { OTPSchema, OTP } from './schemas/otp.schema';
 
 import UsersController from './users.controller';
 import UsersService from './users.service';
-import UsersRepository from './users.repository';
-import UsersVerificationRepository from '@v1/users/users-verification.repository';
+import UsersRepository from './repositories/users.repository';
+import OTPRepository from '@v1/users/repositories/otp.repository';
 
 @Module({
   imports: [
@@ -16,14 +16,14 @@ import UsersVerificationRepository from '@v1/users/users-verification.repository
       name: User.name,
       schema: UserSchema,
     }, {
-      name: UserVerification.name,
-      schema: UserVerificationSchema,
+      name: OTP.name,
+      schema: OTPSchema,
 
     }]),
     DriversModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService, UsersRepository, UsersVerificationRepository],
-  exports: [UsersService, UsersRepository, MongooseModule, UsersVerificationRepository],
+  providers: [UsersService, UsersRepository, OTPRepository],
+  exports: [UsersService, UsersRepository, OTPRepository],
 })
 export default class UsersModule {}

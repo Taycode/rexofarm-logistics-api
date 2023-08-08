@@ -5,7 +5,7 @@ import { validate } from 'class-validator';
 import { Injectable } from '@nestjs/common';
 
 import SignInDto from '@v1/auth/dto/sign-in.dto';
-import UsersRepository from '@v1/users/users.repository';
+import UsersRepository from '@v1/users/repositories/users.repository';
 
 @Injectable()
 export default class AdminService {

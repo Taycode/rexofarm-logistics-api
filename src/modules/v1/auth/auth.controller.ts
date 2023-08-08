@@ -17,7 +17,7 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiExtraModels,
-  getSchemaPath, ApiNotFoundResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { JwtService } from '@nestjs/jwt';
 
@@ -25,7 +25,7 @@ import UsersService from '@v1/users/users.service';
 import WrapResponseInterceptor from '@interceptors/wrap-response.interceptor';
 import SignUpDto from '@v1/users/dto/controller/sign-up.dto';
 import { JWTAuthGuard } from '@v1/auth/guards/jwt.guard';
-import CreateUserverifDto from '@v1/auth/dto/create-userverif.dto';
+import { CompletePasswordResetDto, InitiatePasswordResetDto, ValidatePasswordResetDto } from '@v1/auth/dto/password-reset.dto';
 import AuthService from './auth.service';
 import SignInDto from './dto/sign-in.dto';
 import JwtTokensDto from './dto/jwt-tokens.dto';
@@ -153,55 +153,32 @@ export default class AuthController {
   }
 
   @ApiBody({ type: String })
-  @ApiNotFoundResponse({})
   @ApiOkResponse({
-    description: '201, Success',
+    description: '200, Success',
   })
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Post('forgot-password/otp-request')
-  async forgotPasswordOtpRequest(@Body() email:string):Promise<any> {
-    await this.authService.forgotPasswordOtpRequest(email);
+  async initiatePasswordReset(@Body() payload: InitiatePasswordResetDto) {
+    await this.authService.forgotPasswordOtpRequest(payload.email);
     return { message: 'Otp has been sent' };
   }
 
   @ApiOkResponse({
-    description: '201,Success',
+    description: '200,Success',
   })
   @HttpCode(HttpStatus.OK)
-  @Post('forgot-password/otp-verify')
-  async verifyForgotPasswordOtp(@Body() payload:CreateUserverifDto):Promise<any> {
-    const token = await this.authService.verifyForgotPasswordOtp(payload);
-    return { message: 'Otp verification successfull', data: token };
+  @Post('forgot-password/otp-validate')
+  async validatePasswordReset(@Body() payload: ValidatePasswordResetDto) {
+    const token = await this.authService.validatePasswordResetOTP(payload);
+    return { message: 'Otp verification successfully', data: token };
   }
 
-
-  @ApiOkResponse({
-    schema: {
-      type: 'object',
-      properties: {
-        data: {
-          $ref: getSchemaPath(JwtTokensDto),
-        },
-      },
-    },
-    description: 'Returns jwt tokens',
-  })
-  @ApiInternalServerErrorResponse({
-    schema: {
-      type: 'object',
-      example: {
-        message: 'string',
-        details: {},
-      },
-    },
-    description: '500. InternalServerError',
-  })
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
   @Patch('reset-password')
-  async resetPassword(@Body() password:string, @Req() req: CustomRequest):Promise<any> {
+  async completePasswordReset(@Body() payload: CompletePasswordResetDto, @Req() req: CustomRequest) {
     const { user } = req;
-    const token = await this.authService.resetPassword({ email: user.email, password });
-    return { message: 'successfully changed password', token };
+    const token = await this.authService.resetPassword({ email: user.email, password: payload.password });
+    return { message: 'Password reset successful', token };
   }
 }

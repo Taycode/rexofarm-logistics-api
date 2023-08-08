@@ -4,14 +4,15 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
-import UsersRepository from '@v1/users/users.repository';
+import UsersRepository from '@v1/users/repositories/users.repository';
 import { User } from '@v1/users/schemas/users.schema';
 import { UserInterface } from '@v1/users/interfaces/user.interface';
 import SignInDto from '@v1/auth/dto/sign-in.dto';
 import { generateOtp } from '@v1/auth/helpers/utils';
-import UsersVerificationRepository from '@v1/users/users-verification.repository';
-import CreateUserverifDto from '@v1/auth/dto/create-userverif.dto';
+import OTPRepository from '@v1/users/repositories/otp.repository';
+import CreateOTPDto from '@v1/auth/dto/create-otp.dto';
 import JwtTokensDto from './dto/jwt-tokens.dto';
+import { ValidatePasswordResetDto } from '@v1/auth/dto/password-reset.dto';
 
 @Injectable()
 export default class AuthService {
@@ -19,7 +20,7 @@ export default class AuthService {
     private readonly jwtService: JwtService,
     private readonly usersRepository: UsersRepository,
     private readonly configService: ConfigService,
-    private readonly userVerRepository: UsersVerificationRepository,
+    private readonly userVerRepository: OTPRepository,
   ) { }
 
   public async validateUser(
@@ -70,7 +71,7 @@ export default class AuthService {
     // email service goes here
   }
 
-  public async verifyForgotPasswordOtp(payload:CreateUserverifDto):Promise<any> {
+  public async validatePasswordResetOTP(payload: ValidatePasswordResetDto) {
     const isVerified = await this.userVerRepository.VerifyOtp(payload);
 
     if (!isVerified) {

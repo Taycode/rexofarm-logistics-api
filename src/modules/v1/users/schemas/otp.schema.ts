@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-
-import { OtpTypeEnum } from '@decorators/otp-type.decorator';
+import { OtpTypeEnum } from '@v1/users/enums/otp-type.enum';
 
 @Schema()
-export class UserVerification {
+export class OTP {
   _id:string;
 
   @Prop({
@@ -33,6 +32,6 @@ export class UserVerification {
     expiresAt: () => number = Date.now;
 }
 
-export type UserVerificationDocument = UserVerification & Document;
+export type OTPDocument = OTP & Document;
 
-export const UserVerificationSchema = SchemaFactory.createForClass(UserVerification).set('versionKey', false);
+export const OTPSchema = SchemaFactory.createForClass(OTP).set('versionKey', false);

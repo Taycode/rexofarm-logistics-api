@@ -24,7 +24,6 @@ import { CustomRequest } from '../../../types/request.type';
 export default class UsersController {
   constructor(
       private readonly userService: UsersService,
-    // private readonly jwtSerice: JwtService,
   ) {
   }
 
@@ -76,7 +75,10 @@ export default class UsersController {
   })
   @HttpCode(HttpStatus.OK)
   @Patch('change-password')
-  async changePassword(@Body()payload:ChangePasswordDto, @Req()req:CustomRequest):Promise<void> {
+  async changePassword(
+    @Req() req:CustomRequest,
+    @Body() payload:ChangePasswordDto,
+  ) {
     const { user } = req;
     await this.userService.changePassword(payload, user._id);
   }
