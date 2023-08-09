@@ -62,7 +62,7 @@ export class DeliveryService {
 
   async fetchPickupRequests(driver: Driver) {
     return this.pickupRequestRepository.findWithPopulation(
-      { driver, status: { $ne: PickupRequestStatus.ACCEPTED } },
+      { driver },
       'delivery',
     );
   }
