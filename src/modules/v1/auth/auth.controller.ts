@@ -145,6 +145,9 @@ export default class AuthController {
     return { message: 'Success! please verify your email', data: result };
   }
 
+
+  @ApiBearerAuth()
+  @UseGuards(JWTAuthGuard)
   @ApiBody({ type: VerifyUserDto })
   @ApiOkResponse({
     description: '200,Success',
