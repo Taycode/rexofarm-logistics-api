@@ -8,3 +8,4 @@ export enum KYCType {
   DRIVER_LICENSE = 'driver license',
   NIN = 'nin',
 }
+

@@ -9,6 +9,7 @@ import { UserDocument, User } from '@v1/users/schemas/users.schema';
 
 import { ClientSession, ObjectId } from 'mongodb';
 import { UserWithDriver } from '@v1/users/types/user.type';
+import { KycUploadStatusEnum } from '@v1/users/enums/kyc-upload-status.enum';
 import UpdateUserDto from '../dto/update-user.dto';
 import { BaseRepository } from '../../../../common/repositories/base.repository';
 
@@ -96,5 +97,11 @@ export default class UsersRepository extends BaseRepository<UserDocument> {
     const singleUserWithDriver = userWithDriver[0];
     delete singleUserWithDriver.password;
     return singleUserWithDriver;
+  }
+
+  public async updateKycStatus(kycStatus:KycUploadStatusEnum, userId:string):Promise<void> {
+    await this.usersModel.updateOne({ _id: userId }, {
+      kycStatus,
+    });
   }
 }
