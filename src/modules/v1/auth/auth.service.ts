@@ -11,6 +11,7 @@ import SignInDto from '@v1/auth/dto/sign-in.dto';
 import { generateOtp } from '@v1/auth/helpers/utils';
 import OTPRepository from '@v1/users/repositories/otp.repository';
 import { ValidatePasswordResetDto } from '@v1/auth/dto/password-reset.dto';
+import LoginResponseDto from '@v1/auth/dto/login-response.dto';
 import JwtTokensDto from './dto/jwt-tokens.dto';
 
 @Injectable()
@@ -42,7 +43,7 @@ export default class AuthService {
     return null;
   }
 
-  public async login(data: SignInDto): Promise<JwtTokensDto | null> {
+  public async login(data: SignInDto): Promise<LoginResponseDto | null> {
     const { email, password } = data;
     const user = await this.validateUser(email, password);
     if (!user) return null;
@@ -56,6 +57,7 @@ export default class AuthService {
 
     return {
       token,
+      kycStatus: user.kycStatus,
     };
   }
 

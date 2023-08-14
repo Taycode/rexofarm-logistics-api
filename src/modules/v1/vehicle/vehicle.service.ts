@@ -6,6 +6,8 @@ import { CreateVehicleDto } from '@v1/vehicle/dto/create-vehicle.dto';
 import { Vehicle } from '@v1/vehicle/schema/vehicle.schema';
 import { CloudinaryService } from '@v1/cloudinary/cloudinary.service';
 import { Express } from 'express';
+import UsersRepository from '@v1/users/repositories/users.repository';
+import { KycUploadStatusEnum } from '@v1/users/enums/kyc-upload-status.enum';
 
 @Injectable()
 export class VehicleService {
@@ -13,9 +15,11 @@ export class VehicleService {
     private readonly vehicleRepository: VehicleRepository,
     private readonly vehicleImageRepository: VehicleImageRepository,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly userRepository: UsersRepository,
   ) {}
 
   async createVehicle(payload: CreateVehicleDto, driver: Driver): Promise<Vehicle> {
+    await this.userRepository.updateKycStatus(KycUploadStatusEnum.VEHICLE_DETAILS, driver.user._id);
     return this.vehicleRepository.create({ ...payload, driver });
   }
 
@@ -29,6 +33,7 @@ export class VehicleService {
   }
 
   async uploadMultipleVehicleImage(files: Express.Multer.File[], vehicle: Vehicle) {
+    await this.userRepository.updateKycStatus(KycUploadStatusEnum.VEHICLE_IMAGES, vehicle.driver.user._id);
     return files.map((_) => this.uploadVehicleImage(_, vehicle));
   }
 
