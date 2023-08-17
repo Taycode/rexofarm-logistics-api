@@ -10,11 +10,11 @@ import {
 } from '@nestjs/swagger';
 import WrapResponseInterceptor from '@interceptors/wrap-response.interceptor';
 import UsersService from '@v1/users/users.service';
-// import { JwtService } from '@nestjs/jwt';
 import ChangePasswordDto from '@v1/users/dto/change-password.dto';
 import { JWTAuthGuard } from '@v1/auth/guards/jwt.guard';
 import { User } from './schemas/users.schema';
 import { CustomRequest } from '../../../types/request.type';
+import VerifyUserDto from '@v1/auth/dto/verify-user.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -90,4 +90,20 @@ export default class UsersController {
 	  const payload = await this.userService.initiateVerifyUser(user);
 	  return { verificationToken: payload };
   }
+
+	@ApiBearerAuth()
+	@UseGuards(JWTAuthGuard)
+	@ApiBody({ type: VerifyUserDto })
+	@ApiOkResponse({
+		description: '200,Success',
+	})
+	@HttpCode(HttpStatus.OK)
+	@ApiBearerAuth()
+	@UseGuards(JWTAuthGuard)
+	@Patch('verify/complete')
+	async completeUserVerification(@Body() payload: VerifyUserDto, @Req() req: CustomRequest) {
+		const { user } = req;
+		const tokenAndUser = await this.userService.verifyUser(payload, user);
+		return { message: 'Otp successfully verified', data: tokenAndUser };
+	}
 }

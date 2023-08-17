@@ -81,7 +81,7 @@ export default class UsersService {
 				_id: user._id,
 				email: user.email,
 			};
-	  // Generate token for a re-login
+	  		// Generate token for a re-login
 			const token = await this.jwtService.signAsync(userPayload, {
 				secret: this.configService.get<string>('SECRET'),
 				expiresIn: '1h',

@@ -26,7 +26,6 @@ import WrapResponseInterceptor from '@interceptors/wrap-response.interceptor';
 import SignUpDto from '@v1/users/dto/controller/sign-up.dto';
 import { JWTAuthGuard } from '@v1/auth/guards/jwt.guard';
 import { CompletePasswordResetDto, InitiatePasswordResetDto, ValidatePasswordResetDto } from '@v1/auth/dto/password-reset.dto';
-import VerifyUserDto from '@v1/auth/dto/verify-user.dto';
 import AuthService from './auth.service';
 import SignInDto from './dto/sign-in.dto';
 import JwtTokensDto from './dto/jwt-tokens.dto';
@@ -143,22 +142,6 @@ export default class AuthController {
   async signUp(@Body() payload: SignUpDto): Promise<any> {
   	const result = await this.usersService.create(payload);
   	return { message: 'Success! please verify your email', data: result };
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(JWTAuthGuard)
-  @ApiBody({ type: VerifyUserDto })
-  @ApiOkResponse({
-  	description: '200,Success',
-  })
-  @HttpCode(HttpStatus.OK)
-  @ApiBearerAuth()
-  @UseGuards(JWTAuthGuard)
-  @Patch('verify-signup')
-  async verifySignup(@Body() payload: VerifyUserDto, @Req() req: CustomRequest) {
-  	const { user } = req;
-  	const tokenAndUser = await this.usersService.verifyUser(payload, user._id);
-  	return { message: 'Otp successfully verified', data: tokenAndUser };
   }
 
   @ApiBearerAuth()
