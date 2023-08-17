@@ -8,8 +8,8 @@ import UsersRepository from '@v1/users/repositories/users.repository';
 import { User } from '@v1/users/schemas/users.schema';
 import { UserInterface } from '@v1/users/interfaces/user.interface';
 import SignInDto from '@v1/auth/dto/sign-in.dto';
-import { generateOtp } from '@v1/auth/helpers/utils';
-import OTPRepository from '@v1/users/repositories/otp.repository';
+import { generateOtp } from '@v1/otp/helpers/utils';
+import OTPRepository from '@v1/otp/otp.repository';
 import { ValidatePasswordResetDto } from '@v1/auth/dto/password-reset.dto';
 import JwtTokensDto from './dto/jwt-tokens.dto';
 

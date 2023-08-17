@@ -110,4 +110,8 @@ export abstract class BaseRepository<T extends Document> {
   public async deleteOne(query: FilterQuery<T>) {
     return this.model.deleteOne({ ...query });
   }
+
+  public async deleteMany(query: FilterQuery<T>) {
+	  return this.model.deleteMany({ ...query });
+  }
 }

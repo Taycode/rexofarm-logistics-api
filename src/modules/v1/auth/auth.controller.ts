@@ -145,7 +145,6 @@ export default class AuthController {
     return { message: 'Success! please verify your email', data: result };
   }
 
-
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
   @ApiBody({ type: VerifyUserDto })
@@ -156,7 +155,7 @@ export default class AuthController {
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
   @Patch('verify-signup')
-  async verifySignup(@Body()payload:VerifyUserDto, @Req() req: CustomRequest) {
+  async verifySignup(@Body() payload: VerifyUserDto, @Req() req: CustomRequest) {
     const { user } = req;
     const tokenAndUser = await this.usersService.verifyUser(payload, user._id);
     return { message: 'Otp successfully verified', data: tokenAndUser };

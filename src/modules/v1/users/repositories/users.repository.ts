@@ -55,6 +55,7 @@ export default class UsersRepository extends BaseRepository<UserDocument> {
       },
       {
         projection: { password: 0 },
+		new: true,
       },
     ).lean();
   }

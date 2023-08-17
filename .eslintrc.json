@@ -1,56 +1,62 @@
 {
-    "env": {
-        "es2020": true,
-        "node": true,
-        "mocha": true,
-        "jest": true
-    },
-    "extends": [
-        "airbnb-base"
+  "env": {
+    "es2020": true,
+    "node": true,
+    "mocha": true,
+    "jest": true
+  },
+  "extends": [
+    "airbnb-base"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 11,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "max-len": ["error", { "code": 150 }],
+    "import/no-unresolved": "off",
+    "no-useless-constructor": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "import/extensions": "off",
+    "no-empty-function": "off",
+    "indent": ["error", 2],
+    "arrow-body-style": "off",
+    "class-methods-use-this": "off",
+    "no-underscore-dangle": "off",
+    "consistent-return": "off",
+    "import/prefer-default-export": "off",
+    "max-classes-per-file": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "ForInStatement",
+        "message": "Avoid using 'for...in' loops. Use 'for...of' loops or other alternatives."
+      }
     ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 11,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "@typescript-eslint"
-    ],
-    "rules": {
-        "max-len": [
-            "error",
-            150
-        ],
-        "import/no-unresolved": "off",
-        "no-useless-constructor": "off",
-        "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": [
-            "error"
-        ],
-        "import/extensions": "off",
-        "no-empty-function": "off",
-        "indent": [
-            "error",
-            2
-        ],
-        "arrow-body-style": "off",
-        "class-methods-use-this": "off",
-        "no-underscore-dangle": "off",
-        "consistent-return": "off",
-      "import/prefer-default-export": "off",
-      "max-classes-per-file": "off",
-      "no-shadow": "off",
-      "@typescript-eslint/no-shadow": ["error"]
-    },
-    "overrides": [
-        {
-            "files": [
-                "./src/main.ts",
-                "./src/components/app/app.module.ts"
-            ],
-            "rules": {
-                "no-console": "off"
-            }
-        }
-    ]
+    "no-return-await": "error",
+    "prefer-template": "error",
+    "prefer-destructuring": ["error", { "object": true, "array": false }],
+    "no-param-reassign": ["error", { "props": false }],
+    "no-nested-ternary": "error",
+    "prefer-const": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "./src/main.ts",
+        "./src/components/app/app.module.ts"
+      ],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
 }

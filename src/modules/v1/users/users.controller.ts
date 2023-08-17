@@ -82,4 +82,12 @@ export default class UsersController {
     const { user } = req;
     await this.userService.changePassword(payload, user._id);
   }
+
+	@HttpCode(HttpStatus.OK)
+	@Patch('verify/initiate')
+  async initiateUserVerification(@Req() req: CustomRequest) {
+	  const { user } = req;
+	  const payload = await this.userService.initiateVerifyUser(user);
+	  return { verificationToken: payload };
+  }
 }
