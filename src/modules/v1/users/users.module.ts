@@ -10,15 +10,15 @@ import UsersRepository from './repositories/users.repository';
 import OTPRepository from '@v1/otp/otp.repository';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{
-      name: User.name,
-      schema: UserSchema,
-    }]),
-    DriversModule,
-  ],
-  controllers: [UsersController],
-  providers: [UsersService, UsersRepository, OTPRepository],
-  exports: [UsersService, UsersRepository, OTPRepository],
+	imports: [
+		MongooseModule.forFeature([{
+			name: User.name,
+			schema: UserSchema,
+		}]),
+		DriversModule,
+	],
+	controllers: [UsersController],
+	providers: [UsersService, UsersRepository, OTPRepository],
+	exports: [UsersService, UsersRepository, OTPRepository],
 })
 export default class UsersModule {}

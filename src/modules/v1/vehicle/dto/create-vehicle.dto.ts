@@ -1,9 +1,9 @@
 export class CreateVehicleDto {
-  vehicleType: string;
+	vehicleType: string;
 
-  vehicleMake: string;
+	vehicleMake: string;
 
-  vehicleModel: string;
+	vehicleModel: string;
 
-  numberPlate: string;
+	numberPlate: string;
 }

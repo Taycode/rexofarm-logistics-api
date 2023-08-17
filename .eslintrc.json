@@ -5,9 +5,6 @@
     "mocha": true,
     "jest": true
   },
-  "extends": [
-    "airbnb-base"
-  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 11,
@@ -24,7 +21,7 @@
     "@typescript-eslint/no-unused-vars": ["error"],
     "import/extensions": "off",
     "no-empty-function": "off",
-    "indent": ["error", 2],
+    "indent": ["error", "tab"],
     "arrow-body-style": "off",
     "class-methods-use-this": "off",
     "no-underscore-dangle": "off",

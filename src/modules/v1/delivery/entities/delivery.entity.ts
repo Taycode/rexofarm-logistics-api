@@ -5,8 +5,8 @@ import { Vehicle } from '@v1/vehicle/schema/vehicle.schema';
 
 export class DeliveryEntity extends Delivery {
   @ApiProperty({ type: String })
-    driver: Driver;
+  	driver: Driver;
 
   @ApiProperty({ type: String })
-    vehicle: Vehicle;
+  	vehicle: Vehicle;
 }

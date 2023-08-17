@@ -5,9 +5,9 @@ import CreateUserDto from '@v1/auth/dto/create-user.dto';
 
 export default class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiPropertyOptional({
-    type: Boolean,
+  	type: Boolean,
   })
   @IsOptional()
   @IsBoolean()
-  readonly verified: boolean = false;
+	readonly verified: boolean = false;
 }

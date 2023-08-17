@@ -9,40 +9,40 @@ import { VerifyOtpPayload } from '@v1/otp/interfaces/verify-user-otp.interface';
 
 @Injectable()
 export class OtpService {
-  constructor(
-		private readonly otpRepository: OTPRepository,
+	constructor(
+    private readonly otpRepository: OTPRepository,
 		private readonly jwtService: JwtService,
 		private readonly configService: ConfigService,
-  ) {}
+	) {}
 
-  async generateAndCreateOTP(user: User, otpType: OtpTypeEnum) {
+	async generateAndCreateOTP(user: User, otpType: OtpTypeEnum) {
   	await this.otpRepository.deleteMany({ user, type: otpType });
-    const otp = generateOtp(6);
-    const otpModel = await this.otpRepository.createOtp(user, otp, otpType);
-    // ToDO:  Send the OTP through Email/SMS
-    const otpSignedPayload: VerifyOtpPayload = {
-      otpId: otpModel._id,
-      userId: user._id,
-    };
-    return this.jwtService.signAsync(otpSignedPayload, {
-      secret: this.configService.get<string>('SECRET'),
-      expiresIn: '1m',
-    });
-  }
+		const otp = generateOtp(6);
+		const otpModel = await this.otpRepository.createOtp(user, otp, otpType);
+		// ToDO:  Send the OTP through Email/SMS
+		const otpSignedPayload: VerifyOtpPayload = {
+			otpId: otpModel._id,
+			userId: user._id,
+		};
+		return this.jwtService.signAsync(otpSignedPayload, {
+			secret: this.configService.get<string>('SECRET'),
+			expiresIn: '1m',
+		});
+	}
 
-  async validateOTP(user: User, otpType: OtpTypeEnum, otp: string) {
+	async validateOTP(user: User, otpType: OtpTypeEnum, otp: string) {
 	  const otpModel = await this.otpRepository.findOne({
 		  user,
 		  type: otpType,
 		  otp,
 	  });
 	  if (otpModel) {
-      await this.otpRepository.deleteMany({
-        user,
-        type: otpType,
-      });
-      return undefined;
-    }
+			await this.otpRepository.deleteMany({
+				user,
+				type: otpType,
+			});
+			return undefined;
+		}
 	  throw new Error('OTP not Valid');
-  }
+	}
 }

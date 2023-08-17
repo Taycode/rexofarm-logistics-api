@@ -7,15 +7,15 @@ import { BaseRepository } from '../../../../common/repositories/base.repository'
 
 @Injectable()
 export class DeliveryRepository extends BaseRepository<DeliveryDocument> {
-  constructor(@InjectModel(Delivery.name) private readonly deliveryModel: Model<DeliveryDocument>) {
-    super(deliveryModel);
-  }
+	constructor(@InjectModel(Delivery.name) private readonly deliveryModel: Model<DeliveryDocument>) {
+		super(deliveryModel);
+	}
 
-  async create(payload: CreateDeliveryDto, session?: ClientSession): Promise<Delivery> {
-    if (session) {
-      const createdDelivery = await super.create([payload], session);
-      return createdDelivery[0];
-    }
-    return super.create(payload);
-  }
+	async create(payload: CreateDeliveryDto, session?: ClientSession): Promise<Delivery> {
+		if (session) {
+			const createdDelivery = await super.create([payload], session);
+			return createdDelivery[0];
+		}
+		return super.create(payload);
+	}
 }

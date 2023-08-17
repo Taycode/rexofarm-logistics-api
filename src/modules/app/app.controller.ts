@@ -4,11 +4,11 @@ import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export default class AppController {
-  constructor(private readonly appService: AppService) {}
+	constructor(private readonly appService: AppService) {}
 
   @ApiOkResponse({ description: 'Returns you Hello world!' })
   @Get()
-  sayHello(): string {
-    return this.appService.getHello();
-  }
+	sayHello(): string {
+		return this.appService.getHello();
+	}
 }

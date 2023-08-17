@@ -3,5 +3,5 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateDeliveryStatusDto {
   @ApiProperty({ type: String, enum: DeliveryStatus })
-    status: DeliveryStatus;
+  	status: DeliveryStatus;
 }

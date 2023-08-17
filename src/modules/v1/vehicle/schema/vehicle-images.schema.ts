@@ -8,16 +8,16 @@ import { ApiProperty } from '@nestjs/swagger';
 export class VehicleImage {
   @ApiProperty()
   @Prop({ type: String })
-    url: String;
+  	url: String;
 
   @ApiProperty()
   @Prop({ type: String })
-    publicId: String;
+  	publicId: String;
 
   @ApiProperty({ type: () => Vehicle })
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Vehicle.name, required: true })
   @Type(() => Vehicle)
-    vehicle: Vehicle;
+  	vehicle: Vehicle;
 }
 
 export type VehicleImageDocument = VehicleImage & Document;

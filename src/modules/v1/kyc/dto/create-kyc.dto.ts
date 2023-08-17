@@ -1,13 +1,13 @@
 import { KYCType } from '@v1/kyc/enums/kyc.enum';
 
 class KycFileDto {
-  url: String;
+	url: String;
 
-  publicId: String;
+	publicId: String;
 }
 
 export class CreateKycDto {
-  type: KYCType;
+	type: KYCType;
 
-  files: KycFileDto[];
+	files: KycFileDto[];
 }

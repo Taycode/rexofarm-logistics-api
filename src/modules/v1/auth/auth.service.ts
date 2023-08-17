@@ -15,126 +15,126 @@ import JwtTokensDto from './dto/jwt-tokens.dto';
 
 @Injectable()
 export default class AuthService {
-  constructor(
+	constructor(
     private readonly jwtService: JwtService,
     private readonly usersRepository: UsersRepository,
     private readonly configService: ConfigService,
     private readonly userVerRepository: OTPRepository,
-  ) { }
+	) { }
 
-  public async validateUser(
-    email: string,
-    password: string,
-  ): Promise<null | Omit<User, 'password'>> {
-    const user = await this.usersRepository.getUserByEmail(email);
+	public async validateUser(
+		email: string,
+		password: string,
+	): Promise<null | Omit<User, 'password'>> {
+		const user = await this.usersRepository.getUserByEmail(email);
 
-    if (!user) {
-      throw new NotFoundException('The item does not exist');
-    }
+		if (!user) {
+			throw new NotFoundException('The item does not exist');
+		}
 
-    const { password: userPassword, ...userWithoutPassword } = user;
-    const passwordCompared = await bcrypt.compare(password, userPassword);
+		const { password: userPassword, ...userWithoutPassword } = user;
+		const passwordCompared = await bcrypt.compare(password, userPassword);
 
-    if (passwordCompared) {
-      return userWithoutPassword;
-    }
+		if (passwordCompared) {
+			return userWithoutPassword;
+		}
 
-    return null;
-  }
+		return null;
+	}
 
-  public async login(data: SignInDto): Promise<JwtTokensDto | null> {
-    const { email, password } = data;
-    const user = await this.validateUser(email, password);
-    if (!user) return null;
-    const userPayload: UserInterface = {
-      _id: user._id,
-      email: user.email,
-    };
-    const token = await this.jwtService.signAsync(userPayload, {
-      secret: this.configService.get<string>('SECRET'),
-    });
+	public async login(data: SignInDto): Promise<JwtTokensDto | null> {
+		const { email, password } = data;
+		const user = await this.validateUser(email, password);
+		if (!user) return null;
+		const userPayload: UserInterface = {
+			_id: user._id,
+			email: user.email,
+		};
+		const token = await this.jwtService.signAsync(userPayload, {
+			secret: this.configService.get<string>('SECRET'),
+		});
 
-    return {
-      token,
-    };
-  }
+		return {
+			token,
+		};
+	}
 
-  public async forgotPasswordOtpRequest(email:string):Promise<JwtTokensDto | null > {
-    const exists = await this.usersRepository.getUserByEmail(email);
-    if (!exists) {
-      throw new NotFoundException('user does not exist, signup instead');
-    }
+	public async forgotPasswordOtpRequest(email:string):Promise<JwtTokensDto | null > {
+		const exists = await this.usersRepository.getUserByEmail(email);
+		if (!exists) {
+			throw new NotFoundException('user does not exist, signup instead');
+		}
 
-    const otp = generateOtp(6);
-    const userVer = await this.userVerRepository.createOtp({ email, otp });
+		const otp = generateOtp(6);
+		const userVer = await this.userVerRepository.createOtp({ email, otp });
 
-    // sign a token with the id of the otp and the mail
-    // email service goes here
+		// sign a token with the id of the otp and the mail
+		// email service goes here
 
-    const userPayload: UserInterface = {
-      _id: userVer._id,
-      email: userVer.email,
-    };
+		const userPayload: UserInterface = {
+			_id: userVer._id,
+			email: userVer.email,
+		};
 
-    const token = await this.jwtService.signAsync(userPayload, {
-      secret: this.configService.get<string>('SECRET'),
-      expiresIn: '10m',
+		const token = await this.jwtService.signAsync(userPayload, {
+			secret: this.configService.get<string>('SECRET'),
+			expiresIn: '10m',
 
-    });
+		});
 
-    return {
-      token,
-    };
-  }
+		return {
+			token,
+		};
+	}
 
-  public async validatePasswordResetOTP(payload: ValidatePasswordResetDto, otpId:string) {
-    const isVerified = await this.userVerRepository.VerifyOtp(payload, otpId);
+	public async validatePasswordResetOTP(payload: ValidatePasswordResetDto, otpId:string) {
+		const isVerified = await this.userVerRepository.VerifyOtp(payload, otpId);
 
-    if (!isVerified) {
-      throw new BadRequestException('Otp is wrong');
-    }
+		if (!isVerified) {
+			throw new BadRequestException('Otp is wrong');
+		}
 
-    const user = await this.usersRepository.getUserByEmail(payload.email);
-    if (!user) return null;
-    const userPayload: UserInterface = {
-      _id: user._id,
-      email: user.email,
-    };
-    const token = await this.jwtService.signAsync(userPayload, {
-      secret: this.configService.get<string>('SECRET'),
-      expiresIn: '1h',
-    });
+		const user = await this.usersRepository.getUserByEmail(payload.email);
+		if (!user) return null;
+		const userPayload: UserInterface = {
+			_id: user._id,
+			email: user.email,
+		};
+		const token = await this.jwtService.signAsync(userPayload, {
+			secret: this.configService.get<string>('SECRET'),
+			expiresIn: '1h',
+		});
 
-    return {
-      token,
-    };
+		return {
+			token,
+		};
 
-    // return a short lived token that will be used to set a new password
-  }
+		// return a short lived token that will be used to set a new password
+	}
 
-  public async resetPassword(data:SignInDto):Promise<any> {
-    const { email, password } = data;
-    const user = await this.usersRepository.getUserByEmail(email);
-    if (!user) {
-      throw new BadRequestException('error getting user');
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await this.usersRepository.updateById(user._id, {
-      email,
-      password: hashedPassword,
-      verified: true,
-    });
+	public async resetPassword(data:SignInDto):Promise<any> {
+		const { email, password } = data;
+		const user = await this.usersRepository.getUserByEmail(email);
+		if (!user) {
+			throw new BadRequestException('error getting user');
+		}
+		const hashedPassword = await bcrypt.hash(password, 10);
+		await this.usersRepository.updateById(user._id, {
+			email,
+			password: hashedPassword,
+			verified: true,
+		});
 
-    const userPayload: UserInterface = {
-      _id: user._id,
-      email: user.email,
-    };
-    const token = await this.jwtService.signAsync(userPayload, {
-      secret: this.configService.get<string>('SECRET'),
-    });
+		const userPayload: UserInterface = {
+			_id: user._id,
+			email: user.email,
+		};
+		const token = await this.jwtService.signAsync(userPayload, {
+			secret: this.configService.get<string>('SECRET'),
+		});
 
-    return {
-      token,
-    };
-  }
+		return {
+			token,
+		};
+	}
 }

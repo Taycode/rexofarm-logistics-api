@@ -8,19 +8,19 @@ import { UpdateDriverNextOfKinDto, UpdateDriversDto } from '@v1/drivers/dto/upda
 @Injectable()
 
 export class DriversService {
-  constructor(
+	constructor(
     private readonly driverRepository: DriversRepository,
-  ) {}
+	) {}
 
-  public async createDriver(payload: CreateDriversDto, user: User, session: ClientSession) {
-    return this.driverRepository.createWithTransaction(payload, user, session);
-  }
+	public async createDriver(payload: CreateDriversDto, user: User, session: ClientSession) {
+		return this.driverRepository.createWithTransaction(payload, user, session);
+	}
 
-  public async updateDriverWithUser(payload: UpdateDriversDto, user: User) {
-    return this.driverRepository.updateWithCondition({ user }, payload);
-  }
+	public async updateDriverWithUser(payload: UpdateDriversDto, user: User) {
+		return this.driverRepository.updateWithCondition({ user }, payload);
+	}
 
-  public async updateDriverNextOfKin(payload: UpdateDriverNextOfKinDto, user: User) {
-    return this.driverRepository.updateWithCondition({ user }, { nextOfKin: payload });
-  }
+	public async updateDriverNextOfKin(payload: UpdateDriverNextOfKinDto, user: User) {
+		return this.driverRepository.updateWithCondition({ user }, { nextOfKin: payload });
+	}
 }

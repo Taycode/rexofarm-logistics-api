@@ -6,11 +6,11 @@ export default class VerifyUserDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(6)
-  readonly otp: string;
+	readonly otp: string;
 
 	@ApiProperty({ type: String })
 	@IsNotEmpty()
 	@IsString()
 	@MinLength(6)
-	readonly verificationToken: string;
+ readonly verificationToken: string;
 }

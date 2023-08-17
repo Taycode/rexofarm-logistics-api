@@ -11,18 +11,18 @@ import AuthController from './auth.controller';
 import AuthService from './auth.service';
 
 @Module({
-  imports: [
-    UsersModule,
-    PassportModule,
-    JwtModule.register({
-      secret: authConstants.jwt.secret,
-    }),
-  ],
-  providers: [
-    AuthService,
-    JwtStrategy,
-  ],
-  controllers: [AuthController],
-  exports: [AuthService],
+	imports: [
+		UsersModule,
+		PassportModule,
+		JwtModule.register({
+			secret: authConstants.jwt.secret,
+		}),
+	],
+	providers: [
+		AuthService,
+		JwtStrategy,
+	],
+	controllers: [AuthController],
+	exports: [AuthService],
 })
 export default class AuthModule {}

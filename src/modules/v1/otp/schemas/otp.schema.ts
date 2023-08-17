@@ -7,24 +7,24 @@ import { Type } from 'class-transformer';
 
 @Schema()
 export class OTP {
-  _id:string;
+	_id:string;
 
   @Prop({ required: true, type: String })
-    otp: string;
+  	otp: string;
 
   @Prop({ required: true, type: String, enum: OtpTypeEnum })
-    type: OtpTypeEnum;
+  	type: OtpTypeEnum;
 
   @Prop({
-    type: Date,
-    default: Date.now,
-    index: { expires: '10m' },
+  	type: Date,
+  	default: Date.now,
+  	index: { expires: '10m' },
   })
-    expiresAt: () => number = Date.now;
+  	expiresAt: () => number = Date.now;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name, required: true })
   @Type(() => User)
-    user: User;
+  	user: User;
 }
 
 export type OTPDocument = OTP & Document;

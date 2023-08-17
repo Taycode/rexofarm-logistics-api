@@ -11,17 +11,17 @@ import { BaseRepository } from '../../../common/repositories/base.repository';
 @Injectable()
 
 export class OTPRepository extends BaseRepository<OTPDocument> {
-  constructor(
+	constructor(
         @InjectModel(OTP.name) private otpModel: Model<OTPDocument>,
-  ) {
-    super(otpModel);
-  }
+	) {
+		super(otpModel);
+	}
 
-  public async createOtp(user: User, otp: string, type: OtpTypeEnum): Promise<OTP> {
-    return this.otpModel.create({
-      user,
-      otp,
-      type,
-    });
-  }
+	public async createOtp(user: User, otp: string, type: OtpTypeEnum): Promise<OTP> {
+		return this.otpModel.create({
+			user,
+			otp,
+			type,
+		});
+	}
 }

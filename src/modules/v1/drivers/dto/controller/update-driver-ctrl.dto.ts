@@ -3,34 +3,34 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateDriverCtrlDto {
   @ApiProperty({ type: String })
-    state: string;
+  	state: string;
 
   @ApiProperty({ type: String })
-    city: string;
+  	city: string;
 
   @ApiProperty({ type: String })
-    address: string;
+  	address: string;
 }
 
 export class UpdateDriverNextOfKinCtrlDto {
   @ApiProperty({ type: String, required: true })
-    fullName: string;
+  	fullName: string;
 
   @ApiProperty({ type: String, required: true })
-    gender: string;
+  	gender: string;
 
   @ApiProperty({ type: String, required: true })
-    relationship: string;
+  	relationship: string;
 
   @ApiProperty({ type: String, required: true })
-    phone: string;
+  	phone: string;
 
   @ApiProperty({ type: String, required: true })
-    state: string;
+  	state: string;
 
   @ApiProperty({ type: String, required: true })
-    city: string;
+  	city: string;
 
   @ApiProperty({ type: String, required: true })
-    address: string;
+  	address: string;
 }
