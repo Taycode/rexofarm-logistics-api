@@ -1,16 +1,19 @@
-import { KYCRepository } from '@v1/kyc/kyc.repository';
-import { CreateKycDto } from '@v1/kyc/dto/create-kyc.dto';
-import { User } from '@v1/users/schemas/users.schema';
-import { KYCStatus, KYCType } from '@v1/kyc/enums/kyc.enum';
-import { Injectable } from '@nestjs/common';
-import { CloudinaryService } from '@v1/cloudinary/cloudinary.service';
-import type { Express } from 'express';
+import {KYCRepository} from '@v1/kyc/kyc.repository';
+import {CreateKycDto} from '@v1/kyc/dto/create-kyc.dto';
+import {User} from '@v1/users/schemas/users.schema';
+import {KYCStatus, KYCType} from '@v1/kyc/enums/kyc.enum';
+import {Injectable} from '@nestjs/common';
+import {CloudinaryService} from '@v1/cloudinary/cloudinary.service';
+import type {Express} from 'express';
+import UsersRepository from '@v1/users/repositories/users.repository';
+import {KycUploadStatusEnum} from "@v1/users/enums/kyc-upload-status.enum";
 
 @Injectable()
 export class KYCService {
   constructor(
     private readonly kycRepository: KYCRepository,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly userRepository: UsersRepository,
   ) {}
 
   private uploadMultipleImages(files: Array<Express.Multer.File>) {
@@ -39,10 +42,12 @@ export class KYCService {
   }
 
   public async applyForNin(files: Array<Express.Multer.File>, user: User) {
+    await this.userRepository.updateKycStatus(KycUploadStatusEnum.NIN, user._id);
     return this.applyForKyc(files, KYCType.NIN, user);
   }
 
   public async applyForDriverLicense(files: Array<Express.Multer.File>, user: User) {
+    await this.userRepository.updateKycStatus(KycUploadStatusEnum.LICENSE, user._id);
     return this.applyForKyc(files, KYCType.DRIVER_LICENSE, user);
   }
 }

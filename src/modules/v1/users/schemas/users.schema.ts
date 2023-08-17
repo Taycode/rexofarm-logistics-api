@@ -1,7 +1,8 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { ApiProperty } from '@nestjs/swagger';
-import { RolesEnum } from '@decorators/roles.decorator';
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import {Document} from 'mongoose';
+import {ApiProperty} from '@nestjs/swagger';
+import {RolesEnum} from '@decorators/roles.decorator';
+import {KycUploadStatusEnum} from '@v1/users/enums/kyc-upload-status.enum';
 
 @Schema()
 export class User {
@@ -37,6 +38,14 @@ export class User {
     default: [RolesEnum.USER],
   })
     roles: RolesEnum[] = [];
+
+  @ApiProperty({ type: String, enum: KycUploadStatusEnum, default: [KycUploadStatusEnum.NONE] })
+  @Prop({
+    type: [String],
+    required: false,
+    default: [KycUploadStatusEnum.NONE],
+  })
+    kycStatus: KycUploadStatusEnum = KycUploadStatusEnum.NONE;
 }
 
 export type UserDocument = User & Document;
