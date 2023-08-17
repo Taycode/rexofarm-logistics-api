@@ -12,8 +12,8 @@ export class PickupRequest {
   @ApiProperty()
     _id: string;
 
-  @ApiProperty({ default: PickupRequestStatus.AWAITING_RESPONSE })
-  @Prop({ type: String, default: PickupRequestStatus.AWAITING_RESPONSE })
+  @ApiProperty({ default: PickupRequestStatus.AWAITING_RESPONSE, enum: PickupRequestStatus })
+  @Prop({ type: String, default: PickupRequestStatus.AWAITING_RESPONSE, enum: PickupRequestStatus })
     status: PickupRequestStatus;
 
   @ApiProperty()
