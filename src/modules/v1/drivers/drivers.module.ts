@@ -6,12 +6,12 @@ import { Driver, DriverSchema } from '@v1/drivers/schemas/driver.schema';
 import { DriversController } from '@v1/drivers/drivers.controller';
 
 @Module({
-  controllers: [DriversController],
-  imports: [MongooseModule.forFeature([{
-    name: Driver.name,
-    schema: DriverSchema,
-  }])],
-  providers: [DriversService, DriversRepository],
-  exports: [DriversService],
+	controllers: [DriversController],
+	imports: [MongooseModule.forFeature([{
+		name: Driver.name,
+		schema: DriverSchema,
+	}])],
+	providers: [DriversService, DriversRepository],
+	exports: [DriversService],
 })
 export class DriversModule {}

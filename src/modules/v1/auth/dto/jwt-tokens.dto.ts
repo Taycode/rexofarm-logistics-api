@@ -2,12 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export default class JwtTokensDto {
   @ApiProperty({
-    type: String,
+  	type: String,
   })
-  readonly token: string = '';
-  //
-  // @ApiProperty({
-  //   type: String,
-  // })
-  // readonly refreshToken: string = '';
+	readonly token: string = '';
+	//
+	// @ApiProperty({
+	//   type: String,
+	// })
+	// readonly refreshToken: string = '';
 }

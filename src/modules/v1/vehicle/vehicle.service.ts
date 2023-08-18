@@ -9,46 +9,46 @@ import { Express } from 'express';
 
 @Injectable()
 export class VehicleService {
-  constructor(
+	constructor(
     private readonly vehicleRepository: VehicleRepository,
     private readonly vehicleImageRepository: VehicleImageRepository,
     private readonly cloudinaryService: CloudinaryService,
-  ) {}
+	) {}
 
-  async createVehicle(payload: CreateVehicleDto, driver: Driver): Promise<Vehicle> {
-    return this.vehicleRepository.create({ ...payload, driver });
-  }
+	async createVehicle(payload: CreateVehicleDto, driver: Driver): Promise<Vehicle> {
+		return this.vehicleRepository.create({ ...payload, driver });
+	}
 
-  async uploadVehicleImage(file: Express.Multer.File, vehicle: Vehicle) {
-    const cloudinaryUpload = await this.cloudinaryService.uploadImage(file);
-    return this.vehicleImageRepository.create({
-      url: cloudinaryUpload.secure_url,
-      publicId: cloudinaryUpload.public_id,
-      vehicle,
-    });
-  }
+	async uploadVehicleImage(file: Express.Multer.File, vehicle: Vehicle) {
+		const cloudinaryUpload = await this.cloudinaryService.uploadImage(file);
+		return this.vehicleImageRepository.create({
+			url: cloudinaryUpload.secure_url,
+			publicId: cloudinaryUpload.public_id,
+			vehicle,
+		});
+	}
 
-  async uploadMultipleVehicleImage(files: Express.Multer.File[], vehicle: Vehicle) {
-    return files.map((_) => this.uploadVehicleImage(_, vehicle));
-  }
+	async uploadMultipleVehicleImage(files: Express.Multer.File[], vehicle: Vehicle) {
+		return files.map((_) => this.uploadVehicleImage(_, vehicle));
+	}
 
-  async fetchDriverVehicles(driver: Driver) {
-    return this.vehicleRepository.find({ driver });
-  }
+	async fetchDriverVehicles(driver: Driver) {
+		return this.vehicleRepository.find({ driver });
+	}
 
-  async fetchOneDriverVehicle(driver: Driver, vehicleId: string) {
-    return this.vehicleRepository.findOne({ driver, _id: vehicleId });
-  }
+	async fetchOneDriverVehicle(driver: Driver, vehicleId: string) {
+		return this.vehicleRepository.findOne({ driver, _id: vehicleId });
+	}
 
-  async deleteOneDriverVehicle(driver: Driver, vehicleId: string) {
-    return this.vehicleRepository.deleteOne({ driver, _id: vehicleId });
-  }
+	async deleteOneDriverVehicle(driver: Driver, vehicleId: string) {
+		return this.vehicleRepository.deleteOne({ driver, _id: vehicleId });
+	}
 
-  async fetchVehicleImages(vehicle: Vehicle) {
-    return this.vehicleImageRepository.find({ vehicle });
-  }
+	async fetchVehicleImages(vehicle: Vehicle) {
+		return this.vehicleImageRepository.find({ vehicle });
+	}
 
-  async fetchRandomVehicles() {
-    return this.vehicleRepository.find({});
-  }
+	async fetchRandomVehicles() {
+		return this.vehicleRepository.find({});
+	}
 }

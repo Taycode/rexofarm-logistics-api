@@ -9,20 +9,20 @@ import { VehicleImageRepository } from '@v1/vehicle/repositories/vehicle-image.r
 import { CloudinaryModule } from '@v1/cloudinary/cloudinary.module';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{
-      schema: VehicleSchema,
-      name: Vehicle.name,
-    },
-    {
-      schema: VehicleImageSchema,
-      name: VehicleImage.name,
-    },
-    ]),
-    CloudinaryModule,
-  ],
-  controllers: [VehicleController],
-  providers: [VehicleService, VehicleRepository, VehicleImageRepository],
-  exports: [VehicleService],
+	imports: [
+		MongooseModule.forFeature([{
+			schema: VehicleSchema,
+			name: Vehicle.name,
+		},
+		{
+			schema: VehicleImageSchema,
+			name: VehicleImage.name,
+		},
+		]),
+		CloudinaryModule,
+	],
+	controllers: [VehicleController],
+	providers: [VehicleService, VehicleRepository, VehicleImageRepository],
+	exports: [VehicleService],
 })
 export class VehicleModule {}

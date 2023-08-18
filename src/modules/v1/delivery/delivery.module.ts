@@ -11,25 +11,25 @@ import { DeliveryConsumer } from '@v1/delivery/delivery.consumer';
 import { VehicleModule } from '@v1/vehicle/vehicle.module';
 
 @Module({
-  controllers: [DeliveryController],
-  imports: [MongooseModule.forFeature([{
-    schema: DeliverySchema,
-    name: Delivery.name,
-  },
-  {
-    schema: PickupRequestSchema,
-    name: PickupRequest.name,
-  }]),
-  BullModule.registerQueue({
-    name: 'placed-orders',
-  }),
-    VehicleModule,
-  ],
-  providers: [
-    PickupRequestRepository,
-    DeliveryRepository,
-    DeliveryService,
-    DeliveryConsumer,
-  ],
+	controllers: [DeliveryController],
+	imports: [MongooseModule.forFeature([{
+		schema: DeliverySchema,
+		name: Delivery.name,
+	},
+	{
+		schema: PickupRequestSchema,
+		name: PickupRequest.name,
+	}]),
+	BullModule.registerQueue({
+		name: 'placed-orders',
+	}),
+	VehicleModule,
+	],
+	providers: [
+		PickupRequestRepository,
+		DeliveryRepository,
+		DeliveryService,
+		DeliveryConsumer,
+	],
 })
 export class DeliveryModule {}

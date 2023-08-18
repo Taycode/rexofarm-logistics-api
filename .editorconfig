@@ -9,4 +9,4 @@ insert_final_newline = true
 charset = utf-8
 
 # for others files
-indent_size = tab
+indent_style = tab

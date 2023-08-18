@@ -11,45 +11,45 @@ import AppModule from './modules/app/app.module';
 import ValidationExceptions from './exceptions/validation.exceptions';
 
 import {
-  BadRequestExceptionFilter,
-  UnauthorizedExceptionFilter,
-  ForbiddenExceptionFilter,
-  ValidationExceptionsFilter,
-  NotFoundExceptionFilter,
-  AllExceptionsFilter,
+	BadRequestExceptionFilter,
+	UnauthorizedExceptionFilter,
+	ForbiddenExceptionFilter,
+	ValidationExceptionsFilter,
+	NotFoundExceptionFilter,
+	AllExceptionsFilter,
 } from './filters';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+	const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe({
-    exceptionFactory: (errors: ValidationError[]) => new ValidationExceptions(errors),
-  }));
+	app.useGlobalPipes(new ValidationPipe({
+		exceptionFactory: (errors: ValidationError[]) => new ValidationExceptions(errors),
+	}));
 
-  app.useGlobalFilters(
-    new AllExceptionsFilter(),
-    new UnauthorizedExceptionFilter(),
-    new ForbiddenExceptionFilter(),
-    new BadRequestExceptionFilter(),
-    new NotFoundExceptionFilter(),
-    new ValidationExceptionsFilter(),
-  );
+	app.useGlobalFilters(
+		new AllExceptionsFilter(),
+		new UnauthorizedExceptionFilter(),
+		new ForbiddenExceptionFilter(),
+		new BadRequestExceptionFilter(),
+		new NotFoundExceptionFilter(),
+		new ValidationExceptionsFilter(),
+	);
 
-  const configService = app.get(ConfigService);
-  const port = configService.get<number>('SERVER_POR') || 3000;
+	const configService = app.get(ConfigService);
+	const port = configService.get<number>('SERVER_POR') || 3000;
 
-  const options = new DocumentBuilder()
-    .setTitle('Api v1')
-    .setDescription('The boilerplate API for nestjs devs')
-    .setVersion('1.0')
-    .addBearerAuth({ in: 'header', type: 'http' })
-    .build();
-  const document = SwaggerModule.createDocument(app, options);
+	const options = new DocumentBuilder()
+		.setTitle('Api v1')
+		.setDescription('The boilerplate API for nestjs devs')
+		.setVersion('1.0')
+		.addBearerAuth({ in: 'header', type: 'http' })
+		.build();
+	const document = SwaggerModule.createDocument(app, options);
 
-  SwaggerModule.setup('api', app, document);
+	SwaggerModule.setup('api', app, document);
 
-  await app.listen(port, async () => {
-    console.log(`The server is running on ${port} port: http://localhost:${port}/api`);
-  });
+	await app.listen(port, async () => {
+		console.log(`The server is running on ${port} port: http://localhost:${port}/api`);
+	});
 }
 bootstrap();

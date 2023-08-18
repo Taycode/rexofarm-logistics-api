@@ -1,7 +1,7 @@
 const usersConstants = {
-  models: {
-    users: 'users',
-  },
+	models: {
+		users: 'users',
+	},
 };
 
 export default usersConstants;

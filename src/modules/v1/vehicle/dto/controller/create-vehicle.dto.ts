@@ -3,14 +3,14 @@ import { VehicleType } from '@v1/vehicle/enums/vehicle.enum';
 
 export class CreateVehicleRequestDto {
   @ApiProperty({ type: String, required: true, enum: VehicleType })
-    vehicleType: string;
+  	vehicleType: string;
 
   @ApiProperty({ type: String, required: true })
-    vehicleMake: string;
+  	vehicleMake: string;
 
   @ApiProperty({ type: String, required: true })
-    vehicleModel: string;
+  	vehicleModel: string;
 
   @ApiProperty({ type: String, required: true })
-    numberPlate: string;
+  	numberPlate: string;
 }
