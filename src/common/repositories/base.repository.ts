@@ -6,8 +6,8 @@ import {
 	UpdateQuery,
 	QueryOptions,
 	Document,
+	ClientSession
 } from 'mongoose';
-import { ClientSession } from 'mongodb';
 
 export abstract class BaseRepository<T extends Document> {
 	protected constructor(protected readonly model: Model<T>) {}

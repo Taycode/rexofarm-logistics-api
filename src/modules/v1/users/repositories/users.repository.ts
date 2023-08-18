@@ -1,4 +1,4 @@
-import { Types, Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
 
@@ -7,7 +7,9 @@ import { RolesEnum } from '@decorators/roles.decorator';
 import CreateUserDto from '@v1/auth/dto/create-user.dto';
 import { UserDocument, User } from '@v1/users/schemas/users.schema';
 
-import { ClientSession, ObjectId } from 'mongodb';
+import {  ObjectId } from 'mongodb';
+import { ClientSession } from 'mongoose';
+
 import { UserWithDriver } from '@v1/users/types/user.type';
 import UpdateUserDto from '../dto/update-user.dto';
 import { BaseRepository } from '../../../../common/repositories/base.repository';
@@ -41,13 +43,13 @@ export default class UsersRepository extends BaseRepository<UserDocument> {
 		}).lean();
 	}
 
-	public async getById(id: Types.ObjectId): Promise<User | null> {
+	public async getById(id: string): Promise<User | null> {
 		return this.usersModel.findOne({
 			_id: id,
 		}, { password: 0 }).lean();
 	}
 
-	public async updateById(id: Types.ObjectId, data: UpdateUserDto): Promise<User | null> {
+	public async updateById(id: string, data: UpdateUserDto): Promise<User | null> {
 		return this.usersModel.findByIdAndUpdate(
 			id,
 			{
@@ -63,7 +65,7 @@ export default class UsersRepository extends BaseRepository<UserDocument> {
 	public async getVerifiedAdminByEmail(email: string): Promise<User | null> {
 		return this.usersModel.findOne({
 			email,
-			roles: { $in: RolesEnum.ADMIN },
+			roles: { $in: [RolesEnum.ADMIN] },
 			verified: true,
 		}).lean();
 	}

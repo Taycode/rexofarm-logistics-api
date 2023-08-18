@@ -157,10 +157,10 @@ export default class AuthController {
   	description: '200, Success',
   })
   @HttpCode(HttpStatus.OK)
-  @Post('forgot-password/otp-request')
+  @Post('reset-password/initiate')
   async initiatePasswordReset(@Body() payload: InitiatePasswordResetDto) {
-  	const token = await this.authService.forgotPasswordOtpRequest(payload.email);
-  	return { message: 'Otp has been sent', data: token };
+  	const token = await this.authService.initiatePasswordReset(payload.email);
+  	return { message: 'Otp has been sent', data: { token } };
   }
 
   @ApiBearerAuth()
@@ -169,19 +169,17 @@ export default class AuthController {
   	description: '200,Success',
   })
   @HttpCode(HttpStatus.OK)
-  @Post('forgot-password/otp-validate')
-  async validatePasswordReset(@Body() payload: ValidatePasswordResetDto, @Req() req: CustomRequest) {
-  	const { user } = req;
-  	const token = await this.authService.validatePasswordResetOTP(payload, user._id);
-  	return { message: 'Otp verification successfully', data: token };
+  @Post('reset-password/validate')
+  async validatePasswordReset(@Body() payload: ValidatePasswordResetDto) {
+  	const response = await this.authService.validatePasswordResetOTP(payload);
+  	return { message: 'Otp verification successfully', data: { token: response } };
   }
 
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
   @Patch('reset-password')
-  async completePasswordReset(@Body() payload: CompletePasswordResetDto, @Req() req: CustomRequest) {
-  	const { user } = req;
-  	const token = await this.authService.resetPassword({ email: user.email, password: payload.password });
-  	return { message: 'Password reset successful', token };
+  async completePasswordReset(@Body() payload: CompletePasswordResetDto) {
+  	await this.authService.completeResetPassword(payload);
+  	return { message: 'Password reset successful' };
   }
 }

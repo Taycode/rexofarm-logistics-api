@@ -7,7 +7,8 @@ import { UserSchema, User } from './schemas/users.schema';
 import UsersController from './users.controller';
 import UsersService from './users.service';
 import UsersRepository from './repositories/users.repository';
-import OTPRepository from '@v1/otp/otp.repository';
+import { JwtModule } from "@nestjs/jwt";
+import { OTPModule } from "@v1/otp/otp.module";
 
 @Module({
 	imports: [
@@ -16,9 +17,11 @@ import OTPRepository from '@v1/otp/otp.repository';
 			schema: UserSchema,
 		}]),
 		DriversModule,
+		JwtModule,
+		OTPModule,
 	],
 	controllers: [UsersController],
-	providers: [UsersService, UsersRepository, OTPRepository],
-	exports: [UsersService, UsersRepository, OTPRepository],
+	providers: [UsersService, UsersRepository],
+	exports: [UsersService, UsersRepository],
 })
 export default class UsersModule {}

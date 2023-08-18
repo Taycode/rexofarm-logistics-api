@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 
-import { Connection, Types } from 'mongoose';
+import { Connection } from 'mongoose';
 import {
 	BadRequestException,
 	Injectable,
@@ -19,7 +19,6 @@ import VerifyUserDto from '@v1/auth/dto/verify-user.dto';
 import { OtpService } from '@v1/otp/otp.service';
 import { OtpTypeEnum } from '@v1/users/enums/otp-type.enum';
 import { VerifyOtpPayload } from '@v1/otp/interfaces/verify-user-otp.interface';
-import UpdateUserDto from './dto/update-user.dto';
 import UsersRepository from './repositories/users.repository';
 
 @Injectable()
@@ -114,7 +113,7 @@ export default class UsersService {
 		if (!user) {
 			throw new NotFoundException('No user found with this id');
 		}
-		const isCorrect = await bcrypt.compare(oldPassword, user?.password!);
+		const isCorrect = await bcrypt.compare(oldPassword, user.password!);
 		if (!isCorrect) {
 			throw new BadRequestException('Password is incorrect');
 		}
@@ -124,12 +123,5 @@ export default class UsersService {
 			password: hashedPassword,
 			verified: true,
 		});
-	}
-
-	public update(
-		id: Types.ObjectId,
-		data: UpdateUserDto,
-	): Promise<User | null> {
-		return this.usersRepository.updateById(id, data);
 	}
 }

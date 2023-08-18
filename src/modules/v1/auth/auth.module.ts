@@ -9,6 +9,7 @@ import authConstants from './auth-constants';
 
 import AuthController from './auth.controller';
 import AuthService from './auth.service';
+import { OTPModule } from "@v1/otp/otp.module";
 
 @Module({
 	imports: [
@@ -17,6 +18,7 @@ import AuthService from './auth.service';
 		JwtModule.register({
 			secret: authConstants.jwt.secret,
 		}),
+		OTPModule,
 	],
 	providers: [
 		AuthService,
