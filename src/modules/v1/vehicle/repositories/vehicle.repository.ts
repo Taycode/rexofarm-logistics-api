@@ -6,7 +6,7 @@ import { BaseRepository } from '../../../../common/repositories/base.repository'
 
 @Injectable()
 export class VehicleRepository extends BaseRepository<VehicleDocument> {
-	constructor(@InjectModel(Vehicle.name) private readonly vehicleModel: Model<VehicleDocument>) {
+	constructor(@InjectModel(Vehicle.name) readonly vehicleModel: Model<VehicleDocument>) {
 		super(vehicleModel);
 	}
 }

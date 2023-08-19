@@ -1,9 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { EachProductEntity } from "@v1/vehicle-selection/entities/product-orders.entity";
 
-class CreateDeliveryItemDto {
-	item: string;
-
-	quantity: number;
+class CreateDeliveryItemDto extends EachProductEntity {
+	itemName: string;
 }
 export class CreateDeliveryDto {
 	orderId: string;
@@ -21,11 +20,24 @@ export class CreateDeliveryDto {
 
 class MockCreateDeliveryItemDto {
   @ApiProperty({ type: String })
-  	item: string;
+  	itemName: string;
 
   @ApiProperty({ type: Number, minimum: 1 })
   	quantity: number;
+
+	@ApiProperty({ type: Number })
+		height: number;
+
+	@ApiProperty({ type: Number })
+		width: number;
+
+	@ApiProperty({ type: Number })
+		length: number;
+
+	@ApiProperty({ type: Number })
+		weight: number;
 }
+
 export class MockCreateDeliveryDto {
   @ApiProperty({ type: String, required: true })
   	orderId: string;

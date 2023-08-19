@@ -11,14 +11,17 @@ import { PickupRequestRepository } from '@v1/delivery/repositories/pickup-reques
 import { CreatePickupRequestDto } from '@v1/delivery/dto/create-pickup-request.dto';
 import { PickupRequestStatus } from '@v1/delivery/enums/pickup-request.enum';
 import { VehicleService } from '@v1/vehicle/vehicle.service';
+import { VehicleSelectionService } from "@v1/vehicle-selection/vehicle-selection.service";
+import { EachProductEntity } from "@v1/vehicle-selection/entities/product-orders.entity";
+import { Vehicle } from "@v1/vehicle/schema/vehicle.schema";
 
 @Injectable()
 export class DeliveryService {
 	constructor(
     private readonly deliveryRepository: DeliveryRepository,
     private readonly pickupRequestRepository: PickupRequestRepository,
-    private readonly vehicleService: VehicleService,
-    @InjectConnection() private readonly connection: Connection,
+		private readonly vehicleSelectionService: VehicleSelectionService,
+		@InjectConnection() private readonly connection: Connection,
 	) {}
 
 	DELIVERY_STATUS_WEIGHT = {
@@ -133,15 +136,33 @@ export class DeliveryService {
 		throw new Error('Could not update delivery status');
 	}
 
-	async initiatePickups(payload: CreateDeliveryDto) {
-		// ToDo: Replace with Driver selection system
-		const randomVehicles = await this.vehicleService.fetchRandomVehicles();
-		const driversSelected: DriverPickupRequestDto[] = randomVehicles.map((each) => {
+	private prepareVehicleSelectionPayload(payload: CreateDeliveryDto): EachProductEntity[] {
+		const { items } = payload;
+		return items.map(
+			(eachItem) => {
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				const { itemName, ...remainingPayload } = eachItem;
+				return {
+					...remainingPayload,
+				}
+			}
+		)
+	}
+
+	private preparePickupRequestPayload(vehicles: Vehicle[]): DriverPickupRequestDto[] {
+		return vehicles.map((each) => {
 			return {
 				driver: each.driver,
 				vehicle: each,
 			};
 		});
+	}
+
+
+	async initiatePickups(payload: CreateDeliveryDto) {
+		const selectionPayload = this.prepareVehicleSelectionPayload(payload);
+		const fitVehicles = await this.vehicleSelectionService.fetchVehiclesFit(selectionPayload);
+		const driversSelected = this.preparePickupRequestPayload(fitVehicles)
 		await this.sendPickupRequest(payload, driversSelected);
 	}
 }

@@ -9,6 +9,7 @@ import { PickupRequestRepository } from '@v1/delivery/repositories/pickup-reques
 import { PickupRequest, PickupRequestSchema } from '@v1/delivery/schemas/pickup-request.schema';
 import { DeliveryConsumer } from '@v1/delivery/delivery.consumer';
 import { VehicleModule } from '@v1/vehicle/vehicle.module';
+import { VehicleSelectionModule } from "@v1/vehicle-selection/vehicle-selection.module";
 
 @Module({
 	controllers: [DeliveryController],
@@ -24,6 +25,7 @@ import { VehicleModule } from '@v1/vehicle/vehicle.module';
 		name: 'placed-orders',
 	}),
 	VehicleModule,
+	VehicleSelectionModule,
 	],
 	providers: [
 		PickupRequestRepository,

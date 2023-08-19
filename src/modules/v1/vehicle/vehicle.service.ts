@@ -6,6 +6,7 @@ import { CreateVehicleDto } from '@v1/vehicle/dto/create-vehicle.dto';
 import { Vehicle } from '@v1/vehicle/schema/vehicle.schema';
 import { CloudinaryService } from '@v1/cloudinary/cloudinary.service';
 import { Express } from 'express';
+import { VehicleType } from "@v1/vehicle/enums/vehicle.enum";
 
 @Injectable()
 export class VehicleService {
@@ -17,6 +18,10 @@ export class VehicleService {
 
 	async createVehicle(payload: CreateVehicleDto, driver: Driver): Promise<Vehicle> {
 		return this.vehicleRepository.create({ ...payload, driver });
+	}
+
+	async fetchVehicleByType(type: VehicleType) {
+		return this.vehicleRepository.find({ vehicleType: type })
 	}
 
 	async uploadVehicleImage(file: Express.Multer.File, vehicle: Vehicle) {
