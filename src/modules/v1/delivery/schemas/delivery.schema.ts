@@ -10,11 +10,11 @@ import { ApiProperty } from '@nestjs/swagger';
 export class DeliveryItem {
   @ApiProperty()
   @Prop({ type: String })
-    item: string;
+  	item: string;
 
   @ApiProperty()
   @Prop({ type: Number })
-    quantity: number;
+  	quantity: number;
 }
 
 export const DeliveryItemSchema = SchemaFactory.createForClass(DeliveryItem);
@@ -22,49 +22,49 @@ export const DeliveryItemSchema = SchemaFactory.createForClass(DeliveryItem);
 @Schema({ timestamps: true })
 export class Delivery {
   @ApiProperty()
-    _id: string;
+  	_id: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    orderId: string;
+  	orderId: string;
 
   @ApiProperty({ type: () => Driver })
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Driver.name, required: false })
   @Type(() => Driver)
-    driver: Driver;
+  	driver: Driver;
 
   @ApiProperty({ type: () => Vehicle })
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Vehicle.name, required: false })
   @Type(() => Vehicle)
-    vehicle: Vehicle;
+  	vehicle: Vehicle;
 
   @ApiProperty({ enum: DeliveryStatus, default: DeliveryStatus.UNASSIGNED })
   @Prop({ type: String, enum: DeliveryStatus, default: DeliveryStatus.UNASSIGNED })
-    status: DeliveryStatus;
+  	status: DeliveryStatus;
 
   @ApiProperty()
   @Prop({ type: Date, required: false })
-    deliveredAt: Date;
+  	deliveredAt: Date;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    pickupLocation: string;
+  	pickupLocation: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    destination: string;
+  	destination: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    buyer: string;
+  	buyer: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    seller: string;
+  	seller: string;
 
   @ApiProperty({ type: () => [DeliveryItem] })
   @Prop({ type: [DeliveryItemSchema] })
-    items: DeliveryItem[];
+  	items: DeliveryItem[];
 }
 
 export type DeliveryDocument = Document & Delivery;

@@ -1,10 +1,10 @@
 import { Response as ExpressResponse } from 'express';
 import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpStatus,
-  NotFoundException,
+	ArgumentsHost,
+	Catch,
+	ExceptionFilter,
+	HttpStatus,
+	NotFoundException,
 } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 
@@ -12,22 +12,22 @@ import { ExceptionResponse } from '@interfaces/exception-response.interface';
 
 @Catch(NotFoundException)
 export class NotFoundExceptionFilter implements ExceptionFilter {
-  catch(exception: any, host: ArgumentsHost) {
-    const ctx: HttpArgumentsHost = host.switchToHttp();
-    const res = ctx.getResponse<ExpressResponse>();
+	catch(exception: any, host: ArgumentsHost) {
+		const ctx: HttpArgumentsHost = host.switchToHttp();
+		const res = ctx.getResponse<ExpressResponse>();
 
-    const exceptionResponse: ExceptionResponse = exception.getResponse() as ExceptionResponse;
+		const exceptionResponse: ExceptionResponse = exception.getResponse() as ExceptionResponse;
 
-    const errorBody = {
-      error: exception.name,
-    };
+		const errorBody = {
+			error: exception.name,
+		};
 
-    if (Array.isArray(exceptionResponse.message)) {
-      Reflect.set(errorBody, 'messages', exceptionResponse.message);
-    } else {
-      Reflect.set(errorBody, 'message', exceptionResponse.message);
-    }
+		if (Array.isArray(exceptionResponse.message)) {
+			Reflect.set(errorBody, 'messages', exceptionResponse.message);
+		} else {
+			Reflect.set(errorBody, 'message', exceptionResponse.message);
+		}
 
-    return res.status(HttpStatus.NOT_FOUND).json(errorBody);
-  }
+		return res.status(HttpStatus.NOT_FOUND).json(errorBody);
+	}
 }

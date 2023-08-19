@@ -9,35 +9,35 @@ import UsersRepository from '@v1/users/repositories/users.repository';
 
 @Injectable()
 export default class AdminService {
-  constructor(
+	constructor(
     private readonly usersRepository: UsersRepository,
-  ) {}
+	) {}
 
-  async authAdmin(email: string, password: string): Promise<{ email: string } | null> {
-    const errors = await validate(new SignInDto({ email, password }));
+	async authAdmin(email: string, password: string): Promise<{ email: string } | null> {
+		const errors = await validate(new SignInDto({ email, password }));
 
-    if (!_.isEmpty(errors)) {
-      return null;
-    }
+		if (!_.isEmpty(errors)) {
+			return null;
+		}
 
-    const admin = await this.isAdmin(email, password);
+		const admin = await this.isAdmin(email, password);
 
-    if (admin) {
-      return {
-        email,
-      };
-    }
+		if (admin) {
+			return {
+				email,
+			};
+		}
 
-    return null;
-  }
+		return null;
+	}
 
-  async isAdmin(email: string, password: string) {
-    const admin = await this.usersRepository.getVerifiedAdminByEmail(email);
+	async isAdmin(email: string, password: string) {
+		const admin = await this.usersRepository.getVerifiedAdminByEmail(email);
 
-    if (admin) {
-      return bcrypt.compare(password, admin.password);
-    }
+		if (admin) {
+			return bcrypt.compare(password, admin.password);
+		}
 
-    return null;
-  }
+		return null;
+	}
 }

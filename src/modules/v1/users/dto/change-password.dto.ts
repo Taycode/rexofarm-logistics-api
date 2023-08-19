@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsNotEmpty, IsString, MaxLength, MinLength,
+	IsNotEmpty, IsString, MaxLength, MinLength,
 } from 'class-validator';
 
 export default class ChangePasswordDto {
@@ -9,7 +9,7 @@ export default class ChangePasswordDto {
     @IsString()
     @MinLength(8)
     @MaxLength(64)
-  readonly oldPassword: string = '';
+	readonly oldPassword: string = '';
 
     @ApiProperty({ type: String })
     @IsNotEmpty()

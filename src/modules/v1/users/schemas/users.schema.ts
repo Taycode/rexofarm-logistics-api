@@ -6,37 +6,37 @@ import { RolesEnum } from '@decorators/roles.decorator';
 @Schema()
 export class User {
   @ApiProperty()
-    _id: string;
+  	_id: string;
 
   @ApiProperty()
   @Prop({
-    required: true,
-    unique: true,
-    type: String,
+  	required: true,
+  	unique: true,
+  	type: String,
   })
-    email: string = '';
+  	email: string = '';
 
   @ApiProperty()
   @Prop({
-    required: true,
-    type: String,
+  	required: true,
+  	type: String,
   })
-    password: string = '';
+  	password: string = '';
 
   @ApiProperty()
   @Prop({
-    required: true,
-    type: Boolean,
+  	required: true,
+  	type: Boolean,
   })
-    verified: boolean = false;
+  	verified: boolean = false;
 
   @ApiProperty({ type: [String], enum: RolesEnum, default: [RolesEnum.USER] })
   @Prop({
-    type: [String],
-    required: false,
-    default: [RolesEnum.USER],
+  	type: [String],
+  	required: false,
+  	default: [RolesEnum.USER],
   })
-    roles: RolesEnum[] = [];
+  	roles: RolesEnum[] = [];
 }
 
 export type UserDocument = User & Document;

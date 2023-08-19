@@ -8,20 +8,20 @@ import { UserDocument } from '@v1/users/schemas/users.schema';
 
 @Injectable()
 export default class RolesGuard implements CanActivate {
-  constructor(
+	constructor(
     private reflector: Reflector,
-  ) {}
+	) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const roles = this.reflector.get<RolesEnum[]>('roles', context.getHandler());
+	async canActivate(context: ExecutionContext): Promise<boolean> {
+		const roles = this.reflector.get<RolesEnum[]>('roles', context.getHandler());
 
-    if (_.isEmpty(roles)) {
-      return true;
-    }
+		if (_.isEmpty(roles)) {
+			return true;
+		}
 
-    const request: Request = context.switchToHttp().getRequest();
-    const user = request.user as UserDocument;
+		const request: Request = context.switchToHttp().getRequest();
+		const user = request.user as UserDocument;
 
-    return roles.some((role: RolesEnum) => user.roles.includes(role as RolesEnum));
-  }
+		return roles.some((role: RolesEnum) => user.roles.includes(role as RolesEnum));
+	}
 }

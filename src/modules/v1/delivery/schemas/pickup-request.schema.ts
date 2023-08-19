@@ -10,30 +10,30 @@ import { ApiProperty } from '@nestjs/swagger';
 @Schema({ timestamps: true })
 export class PickupRequest {
   @ApiProperty()
-    _id: string;
+  	_id: string;
 
   @ApiProperty({ default: PickupRequestStatus.AWAITING_RESPONSE, enum: PickupRequestStatus })
   @Prop({ type: String, default: PickupRequestStatus.AWAITING_RESPONSE, enum: PickupRequestStatus })
-    status: PickupRequestStatus;
+  	status: PickupRequestStatus;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    orderId: string;
+  	orderId: string;
 
   @ApiProperty({ type: () => Driver })
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Driver.name, required: true })
   @Type(() => Driver)
-    driver: Driver;
+  	driver: Driver;
 
   @ApiProperty({ type: () => Vehicle })
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Vehicle.name, required: true })
   @Type(() => Vehicle)
-    vehicle: Vehicle;
+  	vehicle: Vehicle;
 
   @ApiProperty({ type: () => Delivery })
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Delivery.name, required: true })
   @Type(() => Delivery)
-    delivery: Delivery;
+  	delivery: Delivery;
 }
 
 export type PickupRequestDocument = PickupRequest & Document;

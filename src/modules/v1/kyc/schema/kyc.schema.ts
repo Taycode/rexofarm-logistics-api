@@ -9,11 +9,11 @@ import { KYCStatus, KYCType } from '@v1/kyc/enums/kyc.enum';
 export class KYCFile {
   @ApiProperty()
   @Prop({ type: String })
-    url: string;
+  	url: string;
 
   @ApiProperty()
   @Prop({ type: String })
-    publicId: string;
+  	publicId: string;
 }
 
 // Register the KYCFile schema with Mongoose
@@ -24,19 +24,19 @@ export class KYC {
   @ApiProperty({ type: () => User })
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name, required: true })
   @Type(() => User)
-    user: User;
+  	user: User;
 
   @ApiProperty({ enum: KYCStatus, default: KYCStatus.PENDING })
   @Prop({ type: String, enum: KYCStatus, default: KYCStatus.PENDING })
-    status: KYCStatus;
+  	status: KYCStatus;
 
   @ApiProperty({ enum: KYCType })
   @Prop({ type: String, enum: KYCType })
-    type: KYCType;
+  	type: KYCType;
 
   @ApiProperty({ type: () => [KYCFile] })
   @Prop({ type: [KYCFileSchema] }) // Use the registered KYCFileSchema for the files array
-    files: KYCFile[];
+  	files: KYCFile[];
 }
 
 export type KYCDocument = KYC & Document;
