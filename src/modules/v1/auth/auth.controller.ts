@@ -173,7 +173,7 @@ export default class AuthController {
   	return { message: 'Otp verification successfully', data: { token: response } };
   }
 
-  @Patch('reset-password')
+  @Patch('reset-password/complete')
   async completePasswordReset(@Body() payload: CompletePasswordResetDto) {
   	await this.authService.completeResetPassword(payload);
   	return { message: 'Password reset successful' };
