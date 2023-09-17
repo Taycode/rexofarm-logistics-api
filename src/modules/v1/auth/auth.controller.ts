@@ -152,7 +152,6 @@ export default class AuthController {
   	return user;
   }
 
-  @ApiBody({ type: String })
   @ApiOkResponse({
   	description: '200, Success',
   })
@@ -160,11 +159,10 @@ export default class AuthController {
   @Post('reset-password/initiate')
   async initiatePasswordReset(@Body() payload: InitiatePasswordResetDto) {
   	const token = await this.authService.initiatePasswordReset(payload.email);
+  	if (!token) throw new HttpException("This email does not exist", HttpStatus.BAD_REQUEST);
   	return { message: 'Otp has been sent', data: { token } };
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JWTAuthGuard)
   @ApiOkResponse({
   	description: '200,Success',
   })
@@ -175,8 +173,6 @@ export default class AuthController {
   	return { message: 'Otp verification successfully', data: { token: response } };
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JWTAuthGuard)
   @Patch('reset-password')
   async completePasswordReset(@Body() payload: CompletePasswordResetDto) {
   	await this.authService.completeResetPassword(payload);

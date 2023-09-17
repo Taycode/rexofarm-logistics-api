@@ -65,7 +65,6 @@ export default class AuthService {
 		email: string,
 	) {
 		const user = await this.usersRepository.getUserByEmail(email);
-
 		if (user) {
 			return this.otpService.generateAndCreateOTP(
 				user,
