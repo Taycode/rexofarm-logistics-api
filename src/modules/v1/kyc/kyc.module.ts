@@ -7,11 +7,11 @@ import { KYC, KYCSchema } from '@v1/kyc/schema/kyc.schema';
 import { KycController } from './kyc.controller';
 
 @Module({
-  controllers: [KycController],
-  providers: [KYCRepository, KYCService],
-  imports: [
-    CloudinaryModule,
-    MongooseModule.forFeature([{ name: KYC.name, schema: KYCSchema }]),
-  ],
+	controllers: [KycController],
+	providers: [KYCRepository, KYCService],
+	imports: [
+		CloudinaryModule,
+		MongooseModule.forFeature([{ name: KYC.name, schema: KYCSchema }]),
+	],
 })
 export class KycModule {}

@@ -1,7 +1,7 @@
 export class CreateDriversDto {
-  firstName: string;
+	firstName: string;
 
-  lastName: string;
+	lastName: string;
 
-  phone: string;
+	phone: string;
 }

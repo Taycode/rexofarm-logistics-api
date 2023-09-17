@@ -5,7 +5,7 @@ import { RolesEnum } from '@decorators/roles.decorator';
 
 export class UserResponseDto {
   @Transform(({ value }) => value.toString(), { toPlainOnly: true })
-  _id: ObjectId = new ObjectId();
+  	_id: ObjectId = new ObjectId();
 
   roles: RolesEnum[] = [RolesEnum.USER];
 
@@ -14,11 +14,11 @@ export class UserResponseDto {
   email: string = '';
 
   @Exclude()
-  password: string = '';
+  	password: string = '';
 }
 
 export default class UsersResponseDto {
   @ValidateNested({ each: true })
   @Type(() => UserResponseDto)
-  data?: UserResponseDto[] = []
+  	data?: UserResponseDto[] = []
 }

@@ -3,11 +3,11 @@ import { Driver } from '@v1/drivers/schemas/driver.schema';
 import { Vehicle } from '@v1/vehicle/schema/vehicle.schema';
 
 export class CreatePickupRequestDto {
-  orderId: string;
+	orderId: string;
 
-  driver: Driver;
+	driver: Driver;
 
-  vehicle: Vehicle;
+	vehicle: Vehicle;
 
-  delivery: Delivery;
+	delivery: Delivery;
 }

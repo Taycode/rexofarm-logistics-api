@@ -1,23 +1,23 @@
 import {
-  Body,
-  Controller,
-  HttpCode,
-  Post,
-  Patch,
-  HttpStatus,
-  UseInterceptors, HttpException,
-  Req, UseGuards, Get,
+	Body,
+	Controller,
+	HttpCode,
+	Post,
+	Patch,
+	HttpStatus,
+	UseInterceptors, HttpException,
+	Req, UseGuards, Get,
 } from '@nestjs/common';
 import {
-  ApiTags,
-  ApiBody,
-  ApiOkResponse,
-  ApiInternalServerErrorResponse,
-  ApiBearerAuth,
-  ApiBadRequestResponse,
-  ApiConflictResponse,
-  ApiExtraModels,
-  getSchemaPath,
+	ApiTags,
+	ApiBody,
+	ApiOkResponse,
+	ApiInternalServerErrorResponse,
+	ApiBearerAuth,
+	ApiBadRequestResponse,
+	ApiConflictResponse,
+	ApiExtraModels,
+	getSchemaPath,
 } from '@nestjs/swagger';
 import { JwtService } from '@nestjs/jwt';
 
@@ -36,149 +36,150 @@ import { CustomRequest } from '../../../types/request.type';
 @ApiExtraModels(JwtTokensDto)
 @Controller()
 export default class AuthController {
-  constructor(
+	constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
-  ) { }
+	) { }
 
   @ApiBody({ type: SignInDto })
   @ApiOkResponse({
-    schema: {
-      type: 'object',
-      properties: {
-        data: {
-          $ref: getSchemaPath(JwtTokensDto),
-        },
-      },
-    },
-    description: 'Returns jwt tokens',
+  	schema: {
+  		type: 'object',
+  		properties: {
+  			data: {
+  				$ref: getSchemaPath(JwtTokensDto),
+  			},
+  		},
+  	},
+  	description: 'Returns jwt tokens',
   })
   @ApiBadRequestResponse({
-    schema: {
-      type: 'object',
-      example: {
-        message: [
-          {
-            target: {
-              email: 'string',
-              password: 'string',
-            },
-            value: 'string',
-            property: 'string',
-            children: [],
-            constraints: {},
-          },
-        ],
-        error: 'Bad Request',
-      },
-    },
-    description: '400. ValidationException',
+  	schema: {
+  		type: 'object',
+  		example: {
+  			message: [
+  				{
+  					target: {
+  						email: 'string',
+  						password: 'string',
+  					},
+  					value: 'string',
+  					property: 'string',
+  					children: [],
+  					constraints: {},
+  				},
+  			],
+  			error: 'Bad Request',
+  		},
+  	},
+  	description: '400. ValidationException',
   })
   @ApiInternalServerErrorResponse({
-    schema: {
-      type: 'object',
-      example: {
-        message: 'string',
-        details: {},
-      },
-    },
-    description: '500. InternalServerError',
+  	schema: {
+  		type: 'object',
+  		example: {
+  			message: 'string',
+  			details: {},
+  		},
+  	},
+  	description: '500. InternalServerError',
   })
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
-  async signIn(@Body() payload: SignInDto): Promise<JwtTokensDto> {
-    const userToken = await this.authService.login(payload);
-    if (userToken) return userToken;
-    throw new HttpException('Credentials are incorrect', HttpStatus.BAD_REQUEST);
-  }
+	async signIn(@Body() payload: SignInDto): Promise<JwtTokensDto> {
+		const userToken = await this.authService.login(payload);
+		if (userToken) return userToken;
+		throw new HttpException('Credentials are incorrect', HttpStatus.BAD_REQUEST);
+	}
 
   @ApiBody({ type: SignUpDto })
   @ApiOkResponse({
-    description: '201, Success',
+  	description: '201, Success',
   })
   @ApiBadRequestResponse({
-    schema: {
-      type: 'object',
-      example: {
-        message: [
-          {
-            target: {
-              email: 'string',
-              password: 'string',
-            },
-            value: 'string',
-            property: 'string',
-            children: [],
-            constraints: {},
-          },
-        ],
-        error: 'Bad Request',
-      },
-    },
-    description: '400. ValidationException',
+  	schema: {
+  		type: 'object',
+  		example: {
+  			message: [
+  				{
+  					target: {
+  						email: 'string',
+  						password: 'string',
+  					},
+  					value: 'string',
+  					property: 'string',
+  					children: [],
+  					constraints: {},
+  				},
+  			],
+  			error: 'Bad Request',
+  		},
+  	},
+  	description: '400. ValidationException',
   })
   @ApiConflictResponse({
-    schema: {
-      type: 'object',
-      example: {
-        message: 'string',
-      },
-    },
-    description: '409. ConflictResponse',
+  	schema: {
+  		type: 'object',
+  		example: {
+  			message: 'string',
+  		},
+  	},
+  	description: '409. ConflictResponse',
   })
   @ApiInternalServerErrorResponse({
-    schema: {
-      type: 'object',
-      example: {
-        message: 'string',
-        details: {},
-      },
-    },
-    description: '500. InternalServerError',
+  	schema: {
+  		type: 'object',
+  		example: {
+  			message: 'string',
+  			details: {},
+  		},
+  	},
+  	description: '500. InternalServerError',
   })
   @HttpCode(HttpStatus.CREATED)
   @Post('sign-up')
   async signUp(@Body() payload: SignUpDto): Promise<any> {
-    const result = await this.usersService.create(payload);
-    return { message: 'Success! please verify your email', data: result };
+  	const result = await this.usersService.create(payload);
+  	return { message: 'Success! please verify your email', data: result };
   }
 
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
   @Get('fetch-me')
   async fetchMe(@Req() req: CustomRequest) {
-    const { user } = req;
-    return user;
+  	const { user } = req;
+  	return user;
   }
 
   @ApiBody({ type: String })
   @ApiOkResponse({
-    description: '200, Success',
+  	description: '200, Success',
   })
   @HttpCode(HttpStatus.OK)
-  @Post('forgot-password/otp-request')
+  @Post('reset-password/initiate')
   async initiatePasswordReset(@Body() payload: InitiatePasswordResetDto) {
-    await this.authService.forgotPasswordOtpRequest(payload.email);
-    return { message: 'Otp has been sent' };
+  	const token = await this.authService.initiatePasswordReset(payload.email);
+  	return { message: 'Otp has been sent', data: { token } };
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JWTAuthGuard)
   @ApiOkResponse({
-    description: '200,Success',
+  	description: '200,Success',
   })
   @HttpCode(HttpStatus.OK)
-  @Post('forgot-password/otp-validate')
+  @Post('reset-password/validate')
   async validatePasswordReset(@Body() payload: ValidatePasswordResetDto) {
-    const token = await this.authService.validatePasswordResetOTP(payload);
-    return { message: 'Otp verification successfully', data: token };
+  	const response = await this.authService.validatePasswordResetOTP(payload);
+  	return { message: 'Otp verification successfully', data: { token: response } };
   }
 
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
   @Patch('reset-password')
-  async completePasswordReset(@Body() payload: CompletePasswordResetDto, @Req() req: CustomRequest) {
-    const { user } = req;
-    const token = await this.authService.resetPassword({ email: user.email, password: payload.password });
-    return { message: 'Password reset successful', token };
+  async completePasswordReset(@Body() payload: CompletePasswordResetDto) {
+  	await this.authService.completeResetPassword(payload);
+  	return { message: 'Password reset successful' };
   }
 }

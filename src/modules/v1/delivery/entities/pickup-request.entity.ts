@@ -7,22 +7,22 @@ import { DeliveryEntity } from '@v1/delivery/entities/delivery.entity';
 
 export class PickupRequestEntity extends PickupRequest {
   @ApiProperty({ type: String })
-    driver: Driver;
+  	driver: Driver;
 
   @ApiProperty({ type: String })
-    vehicle: Vehicle;
+  	vehicle: Vehicle;
 
   @ApiProperty({ type: String })
-    delivery: Delivery;
+  	delivery: Delivery;
 }
 
 export class PickupRequestWithDeliveryEntity extends PickupRequest {
   @ApiProperty({ type: String })
-    driver: Driver;
+  	driver: Driver;
 
   @ApiProperty({ type: String })
-    vehicle: Vehicle;
+  	vehicle: Vehicle;
 
   @ApiProperty({ type: DeliveryEntity })
-    delivery: Delivery;
+  	delivery: Delivery;
 }

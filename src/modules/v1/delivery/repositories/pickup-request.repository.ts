@@ -7,11 +7,11 @@ import { BaseRepository } from '../../../../common/repositories/base.repository'
 
 @Injectable()
 export class PickupRequestRepository extends BaseRepository<PickupRequestDocument> {
-  constructor(@InjectModel(PickupRequest.name) private readonly pickupRequestModel: Model<PickupRequestDocument>) {
-    super(pickupRequestModel);
-  }
+	constructor(@InjectModel(PickupRequest.name) private readonly pickupRequestModel: Model<PickupRequestDocument>) {
+		super(pickupRequestModel);
+	}
 
-  async create(payload: CreatePickupRequestDto[], session?: ClientSession): Promise<PickupRequest> {
-    return super.create([...payload], session);
-  }
+	async create(payload: CreatePickupRequestDto[], session?: ClientSession): Promise<PickupRequest> {
+		return super.create([...payload], session);
+	}
 }

@@ -17,40 +17,40 @@ import { createBullMqOptions } from '../../common/utils/redis-option.util';
 // import AdminPanelModule from './admin/admin-panel.module';
 
 const routes: Routes = [
-  {
-    path: '/v1',
-    children: [
-      { path: '/auth', module: AuthModule },
-      { path: '/user', module: UsersModule },
-      { path: '/driver', module: DriversModule },
-      { path: '/vehicle', module: VehicleModule },
-      { path: '/delivery', module: DeliveryModule },
-    ],
-  },
+	{
+		path: '/v1',
+		children: [
+			{ path: '/auth', module: AuthModule },
+			{ path: '/user', module: UsersModule },
+			{ path: '/driver', module: DriversModule },
+			{ path: '/vehicle', module: VehicleModule },
+			{ path: '/delivery', module: DeliveryModule },
+		],
+	},
 ];
 
 @Module({
-  imports: [
-    RouterModule.register(routes),
-    AuthModule,
-    UsersModule,
-    CloudinaryModule,
-    DriversModule,
-    KycModule,
-    VehicleModule,
-    DeliveryModule,
-    BullModule.forRootAsync({
-      useFactory: createBullMqOptions,
-    }),
-    BullBoardModule.forRoot({
-      route: '/queues',
-      adapter: ExpressAdapter,
-    }),
-    BullBoardModule.forFeature({
-      name: 'placed-orders',
-      adapter: BullMQAdapter,
-    }),
-    // AdminPanelModule,
-  ],
+	imports: [
+		RouterModule.register(routes),
+		AuthModule,
+		UsersModule,
+		CloudinaryModule,
+		DriversModule,
+		KycModule,
+		VehicleModule,
+		DeliveryModule,
+		BullModule.forRootAsync({
+			useFactory: createBullMqOptions,
+		}),
+		BullBoardModule.forRoot({
+			route: '/queues',
+			adapter: ExpressAdapter,
+		}),
+		BullBoardModule.forFeature({
+			name: 'placed-orders',
+			adapter: BullMQAdapter,
+		}),
+		// AdminPanelModule,
+	],
 })
 export default class V1Module {}

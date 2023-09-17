@@ -13,62 +13,62 @@ import AdminValidationException from '@exceptions/admim-validation.exception';
 import { RolesEnum } from '@decorators/roles.decorator';
 
 const beforeCreateUser = async (request: ActionRequest) => {
-  const payload = new CreateUserDto(flat.unflatten(request.payload) as ICreateUser);
+	const payload = new CreateUserDto(flat.unflatten(request.payload) as ICreateUser);
 
-  if (!payload.verified) {
-    Reflect.set(payload, 'verified', false);
-  }
+	if (!payload.verified) {
+		Reflect.set(payload, 'verified', false);
+	}
 
-  const errors = await validate(payload);
+	const errors = await validate(payload);
 
-  if (!_.isEmpty(errors)) {
-    throw new AdminValidationException(errors);
-  }
+	if (!_.isEmpty(errors)) {
+		throw new AdminValidationException(errors);
+	}
 
-  Reflect.set(request, 'payload', flat.flatten(payload));
+	Reflect.set(request, 'payload', flat.flatten(payload));
 
-  return request;
+	return request;
 };
 
 export default (userModel: Model<User>) => ({
-  resource: userModel,
-  options: {
-    properties: {
-      password: {
-        isVisible: false,
-      },
-      setPassword: {
-        isVisible: {
-          list: false,
-          edit: true,
-          filter: false,
-          show: false,
-        },
-      },
-      verified: {
-        isRequired: false,
-      },
-      roles: {
-        availableValues: Object.values(RolesEnum).map((role) => ({
-          label: role,
-          value: role,
-        })),
-      },
-    },
-    actions: {
-      new: {
-        before: beforeCreateUser,
-      },
-      edit: {
-        before: beforeCreateUser,
-      },
-    },
-  },
-  features: [passwordsFeature({
-    properties: {
-      password: 'setPassword',
-      encryptedPassword: 'password',
-    },
-    hash: (password) => bcrypt.hash(password, 10),
-  })],
+	resource: userModel,
+	options: {
+		properties: {
+			password: {
+				isVisible: false,
+			},
+			setPassword: {
+				isVisible: {
+					list: false,
+					edit: true,
+					filter: false,
+					show: false,
+				},
+			},
+			verified: {
+				isRequired: false,
+			},
+			roles: {
+				availableValues: Object.values(RolesEnum).map((role) => ({
+					label: role,
+					value: role,
+				})),
+			},
+		},
+		actions: {
+			new: {
+				before: beforeCreateUser,
+			},
+			edit: {
+				before: beforeCreateUser,
+			},
+		},
+	},
+	features: [passwordsFeature({
+		properties: {
+			password: 'setPassword',
+			encryptedPassword: 'password',
+		},
+		hash: (password) => bcrypt.hash(password, 10),
+	})],
 });

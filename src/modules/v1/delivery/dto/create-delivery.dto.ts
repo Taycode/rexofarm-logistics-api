@@ -1,47 +1,47 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 class CreateDeliveryItemDto {
-  item: string;
+	item: string;
 
-  quantity: number;
+	quantity: number;
 }
 export class CreateDeliveryDto {
-  orderId: string;
+	orderId: string;
 
-  pickupLocation: string;
+	pickupLocation: string;
 
-  destination: string;
+	destination: string;
 
-  buyer: string;
+	buyer: string;
 
-  seller: string;
+	seller: string;
 
-  items: CreateDeliveryItemDto[];
+	items: CreateDeliveryItemDto[];
 }
 
 class MockCreateDeliveryItemDto {
   @ApiProperty({ type: String })
-    item: string;
+  	item: string;
 
   @ApiProperty({ type: Number, minimum: 1 })
-    quantity: number;
+  	quantity: number;
 }
 export class MockCreateDeliveryDto {
   @ApiProperty({ type: String, required: true })
-    orderId: string;
+  	orderId: string;
 
   @ApiProperty({ type: String, required: true })
-    pickupLocation: string;
+  	pickupLocation: string;
 
   @ApiProperty({ type: String, required: true })
-    destination: string;
+  	destination: string;
 
   @ApiProperty({ type: String, required: true })
-    buyer: string;
+  	buyer: string;
 
   @ApiProperty({ type: String, required: true })
-    seller: string;
+  	seller: string;
 
   @ApiProperty({ isArray: true, type: MockCreateDeliveryItemDto })
-    items: MockCreateDeliveryItemDto[];
+  	items: MockCreateDeliveryItemDto[];
 }

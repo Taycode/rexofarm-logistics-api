@@ -10,20 +10,20 @@ import { BaseRepository } from '../../../common/repositories/base.repository';
 @Injectable()
 
 export class DriversRepository extends BaseRepository<DriverDocument> {
-  constructor(@InjectModel(Driver.name) private driversModel: Model<DriverDocument>) {
-    super(driversModel);
-  }
+	constructor(@InjectModel(Driver.name) private driversModel: Model<DriverDocument>) {
+		super(driversModel);
+	}
 
-  public async createWithTransaction(payload: CreateDriversDto, user: User, session: ClientSession): Promise<Driver> {
-    const createdDriver = await this.driversModel.create([{ ...payload, user }], { session });
-    return createdDriver[0];
-  }
+	public async createWithTransaction(payload: CreateDriversDto, user: User, session: ClientSession): Promise<Driver> {
+		const createdDriver = await this.driversModel.create([{ ...payload, user }], { session });
+		return createdDriver[0];
+	}
 
-  public async update(driverId: string, payload: UpdateDriversDto) {
-    return this.driversModel.findByIdAndUpdate(driverId, payload);
-  }
+	public async update(driverId: string, payload: UpdateDriversDto) {
+		return this.driversModel.findByIdAndUpdate(driverId, payload);
+	}
 
-  public async updateWithCondition(condition: FilterQuery<DriverDocument>, payload: UpdateDriversDto) {
-    return this.driversModel.findOneAndUpdate(condition, payload, { new: true, omitUndefined: true });
-  }
+	public async updateWithCondition(condition: FilterQuery<DriverDocument>, payload: UpdateDriversDto) {
+		return this.driversModel.findOneAndUpdate(condition, payload, { new: true, omitUndefined: true });
+	}
 }

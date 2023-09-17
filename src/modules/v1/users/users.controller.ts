@@ -1,20 +1,20 @@
 import {
-  Controller,
-  UseInterceptors, HttpCode, HttpStatus, Body, Patch, UseGuards, Req,
+	Controller,
+	UseInterceptors, HttpCode, HttpStatus, Body, Patch, UseGuards, Req,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
-  ApiBearerAuth, ApiBody, ApiConflictResponse,
-  ApiExtraModels, ApiInternalServerErrorResponse, ApiOkResponse,
-  ApiTags,
+	ApiBadRequestResponse,
+	ApiBearerAuth, ApiBody, ApiConflictResponse,
+	ApiExtraModels, ApiInternalServerErrorResponse, ApiOkResponse,
+	ApiTags,
 } from '@nestjs/swagger';
 import WrapResponseInterceptor from '@interceptors/wrap-response.interceptor';
 import UsersService from '@v1/users/users.service';
-// import { JwtService } from '@nestjs/jwt';
 import ChangePasswordDto from '@v1/users/dto/change-password.dto';
 import { JWTAuthGuard } from '@v1/auth/guards/jwt.guard';
 import { User } from './schemas/users.schema';
 import { CustomRequest } from '../../../types/request.type';
+import VerifyUserDto from '@v1/auth/dto/verify-user.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -22,64 +22,88 @@ import { CustomRequest } from '../../../types/request.type';
 @UseInterceptors(WrapResponseInterceptor)
 @Controller()
 export default class UsersController {
-  constructor(
+	constructor(
       private readonly userService: UsersService,
-  ) {
-  }
+	) {
+	}
 
   @ApiBody({ type: ChangePasswordDto })
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
   @ApiOkResponse({
-    description: '201, Success',
+  	description: '201, Success',
   })
   @ApiBadRequestResponse({
-    schema: {
-      type: 'object',
-      example: {
-        message: [
-          {
-            target: {
-              email: 'string',
-              password: 'string',
-            },
-            value: 'string',
-            property: 'string',
-            children: [],
-            constraints: {},
-          },
-        ],
-        error: 'Bad Request',
-      },
-    },
-    description: '400. ValidationException',
+  	schema: {
+  		type: 'object',
+  		example: {
+  			message: [
+  				{
+  					target: {
+  						email: 'string',
+  						password: 'string',
+  					},
+  					value: 'string',
+  					property: 'string',
+  					children: [],
+  					constraints: {},
+  				},
+  			],
+  			error: 'Bad Request',
+  		},
+  	},
+  	description: '400. ValidationException',
   })
   @ApiConflictResponse({
-    schema: {
-      type: 'object',
-      example: {
-        message: 'string',
-      },
-    },
-    description: '409. ConflictResponse',
+  	schema: {
+  		type: 'object',
+  		example: {
+  			message: 'string',
+  		},
+  	},
+  	description: '409. ConflictResponse',
   })
   @ApiInternalServerErrorResponse({
-    schema: {
-      type: 'object',
-      example: {
-        message: 'string',
-        details: {},
-      },
-    },
-    description: '500. InternalServerError',
+  	schema: {
+  		type: 'object',
+  		example: {
+  			message: 'string',
+  			details: {},
+  		},
+  	},
+  	description: '500. InternalServerError',
   })
   @HttpCode(HttpStatus.OK)
   @Patch('change-password')
-  async changePassword(
+	async changePassword(
     @Req() req:CustomRequest,
     @Body() payload:ChangePasswordDto,
-  ) {
-    const { user } = req;
-    await this.userService.changePassword(payload, user._id);
+	) {
+		const { user } = req;
+		await this.userService.changePassword(payload, user._id);
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@Patch('verify/initiate')
+  async initiateUserVerification(@Req() req: CustomRequest) {
+	  const { user } = req;
+	  const payload = await this.userService.initiateVerifyUser(user);
+	  return { verificationToken: payload };
   }
+
+	@ApiBearerAuth()
+	@UseGuards(JWTAuthGuard)
+	@ApiBody({ type: VerifyUserDto })
+	@ApiOkResponse({
+		description: '200,Success',
+	})
+	@HttpCode(HttpStatus.OK)
+	@ApiBearerAuth()
+	@UseGuards(JWTAuthGuard)
+	@Patch('verify/complete')
+	async completeUserVerification(@Body() payload: VerifyUserDto, @Req() req: CustomRequest) {
+		const { user } = req;
+		const tokenAndUser = await this.userService.verifyUser(payload, user);
+		return { message: 'Otp successfully verified', data: tokenAndUser };
+	}
 }

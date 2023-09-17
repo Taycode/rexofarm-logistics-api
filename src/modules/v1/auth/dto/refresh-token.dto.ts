@@ -3,10 +3,10 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export default class RefreshTokenDto {
   @ApiProperty({
-    type: String,
+  	type: String,
   })
   @IsNotEmpty()
   @MinLength(32)
   @IsString()
-  readonly refreshToken: string = '';
+	readonly refreshToken: string = '';
 }

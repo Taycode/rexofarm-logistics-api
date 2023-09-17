@@ -9,31 +9,31 @@ import { ApiProperty } from '@nestjs/swagger';
 class NextOfKin {
   @ApiProperty()
   @Prop({ type: String, required: true })
-    fullName: string;
+  	fullName: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    gender: string;
+  	gender: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    relationship: string;
+  	relationship: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    phone: string;
+  	phone: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    state: string;
+  	state: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    city: string;
+  	city: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    address: string;
+  	address: string;
 }
 
 @Schema()
@@ -41,43 +41,43 @@ export class Driver {
   @ApiProperty({ type: () => User })
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name, required: true })
   @Type(() => User)
-    user: User;
+  	user: User;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    firstName: string;
+  	firstName: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    lastName: string;
+  	lastName: string;
 
   @ApiProperty()
   @Prop({ type: String, required: true })
-    phone: string;
+  	phone: string;
 
   @ApiProperty()
   @Prop({ type: String })
-    state: string;
+  	state: string;
 
   @ApiProperty()
   @Prop({ type: String })
-    city: string;
+  	city: string;
 
   @ApiProperty()
   @Prop({ type: String })
-    address: string;
+  	address: string;
 
   @ApiProperty()
   @Prop({ type: String })
-    driverLicenseUrl: string;
+  	driverLicenseUrl: string;
 
   @ApiProperty()
   @Prop({ type: String })
-    driverNinUrl: string;
+  	driverNinUrl: string;
 
   @ApiProperty({ type: () => NextOfKin })
   @Prop({ type: NextOfKin })
-    nextOfKin: NextOfKin;
+  	nextOfKin: NextOfKin;
 }
 
 export type DriverDocument = Driver & Document;
