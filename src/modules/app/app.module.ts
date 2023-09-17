@@ -22,6 +22,7 @@ import AppService from './app.service';
 			reconnectInterval: 1000,
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
+			useFindAndModify: true,
 		}),
 		RedisModule.forRootAsync({
 			useFactory: (cfg: ConfigService) => ({
