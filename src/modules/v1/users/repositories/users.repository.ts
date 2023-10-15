@@ -49,6 +49,12 @@ export default class UsersRepository extends BaseRepository<UserDocument> {
 		}, { password: 0 }).lean();
 	}
 
+	public async getByIdWithPassword(id: string): Promise<User | null> {
+		return this.usersModel.findOne({
+			_id: id,
+		}).lean();
+	}
+
 	public async updateById(id: string, data: UpdateUserDto): Promise<User | null> {
 		return this.usersModel.findByIdAndUpdate(
 			id,

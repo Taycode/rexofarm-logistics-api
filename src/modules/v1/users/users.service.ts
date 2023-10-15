@@ -109,7 +109,7 @@ export default class UsersService {
 	public async changePassword(details: ChangePasswordDto, userId: string) {
 		const { oldPassword, newPassword } = details;
 
-		const user = await this.usersRepository.getById(userId);
+		const user = await this.usersRepository.getByIdWithPassword(userId);
 		if (!user) {
 			throw new NotFoundException('No user found with this id');
 		}
