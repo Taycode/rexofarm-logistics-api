@@ -5,6 +5,7 @@ import { KYCStatus, KYCType } from '@v1/kyc/enums/kyc.enum';
 import { Injectable } from '@nestjs/common';
 import { CloudinaryService } from '@v1/cloudinary/cloudinary.service';
 import type { Express } from 'express';
+import { FetchKycStatusEntity } from "@v1/kyc/entities/fetch-kyc-status.entity";
 
 @Injectable()
 export class KYCService {
@@ -44,5 +45,20 @@ export class KYCService {
 
 	public async applyForDriverLicense(files: Array<Express.Multer.File>, user: User) {
 		return this.applyForKyc(files, KYCType.DRIVER_LICENSE, user);
+	}
+
+	public async fetchKycStatus(user: User): Promise<FetchKycStatusEntity> {
+		const driverLicense = await this.kycRepository.findOne({
+			user,
+			type: KYCType.DRIVER_LICENSE,
+		})
+		const nin = await this.kycRepository.findOne({
+			user,
+			type: KYCType.NIN,
+		})
+		return {
+			nin: nin ? nin.status : null,
+			driverLicense: driverLicense ? driverLicense.status : null
+		}
 	}
 }
